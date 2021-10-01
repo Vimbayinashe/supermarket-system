@@ -5,11 +5,13 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 public final class Product {
+    private final int id;
     private final String name;
     private final String brand;
     private final String category;
     private final BigDecimal price;
     private final int scale;
+    private static int count;
 
     public Product(String name, String brand, String category, String price) {
 
@@ -19,10 +21,15 @@ public final class Product {
             Cast to double is a valid double, price.asDouble > 0, price has maximum 2 decimal places
             name, brand, category, price != null
             name != empty string ""
+
+            Invalid argument should throw an error
+
+            Add try catch block around new Product creation.
          */
 
         this.scale = 2;
 
+        this.id = ++count;
         this.name = name;
         this.brand = brand;
         this.category = category;
@@ -31,6 +38,10 @@ public final class Product {
         //todo: Is it necessary to store price as BigDecimal? (as according to article)
         // input String datatype for price -> convert to BigDecimal.
 
+    }
+
+    public String id() {
+        return String.valueOf(id);
     }
 
     public String name() {
@@ -50,28 +61,30 @@ public final class Product {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Product) obj;
-        return Objects.equals(this.name, that.name) &&
-                Objects.equals(this.brand, that.brand) &&
-                Objects.equals(this.category, that.category) &&
-                Objects.equals(this.price, that.price);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id && scale == product.scale && Objects.equals(name, product.name) &&
+                Objects.equals(brand, product.brand) && Objects.equals(category, product.category) &&
+                Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, brand, category, price);
+        return Objects.hash(id, name, brand, category, price, scale);
     }
 
     @Override
     public String toString() {
-        return "Product[" +
-                "name=" + name + ", " +
-                "brand=" + brand + ", " +
-                "category=" + category + ", " +
-                "price=" + price + ']';
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                ", scale=" + scale +
+                '}';
     }
 
     public static void main(String[] args) {
