@@ -1,15 +1,12 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Categories {
 
     //todo: maybe just Collection instead of List & List.of instead of ArrayList?
-    private List<String> categories;
+    private final List<String> categories;
 
     Categories() {
         categories = initialCategories();
