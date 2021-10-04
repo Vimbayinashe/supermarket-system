@@ -7,12 +7,12 @@ import java.util.Objects;
 public final class Product {
     private final int id;
     private final String name;
-    private final String brand;
+    //    private final String brand; //todo: is brand necessary?
     private final String category;
     private final BigDecimal price;
     private static int count;
 
-    public Product(String name, String brand, String category, String price) {
+    public Product(String name, String category, String price) {
 
         //todo: add Guard.Against  the following
         /*
@@ -30,7 +30,6 @@ public final class Product {
 
         this.id = ++count;
         this.name = name;
-        this.brand = brand;
         this.category = category;
         this.price = (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);
 
@@ -47,10 +46,6 @@ public final class Product {
         return name;
     }
 
-    public String brand() {
-        return brand;
-    }
-
     public String category() {
         return category;
     }
@@ -64,13 +59,13 @@ public final class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id == product.id && Objects.equals(name, product.name) && Objects.equals(brand, product.brand) &&
-                Objects.equals(category, product.category) && Objects.equals(price, product.price);
+        return id == product.id && Objects.equals(name, product.name) && Objects.equals(category, product.category)
+                && Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, brand, category, price);
+        return Objects.hash(id, name, category, price);
     }
 
     @Override
@@ -78,14 +73,13 @@ public final class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
                 ", category='" + category + '\'' +
                 ", price=" + price +
                 '}';
     }
 
     public static void main(String[] args) {
-        Product product = new Product("Läsk", "Mazoe", "chees", "-1");
+        Product product = new Product("Läsk", "cheese", "-1");
         System.out.println(product);
     }
 }
