@@ -10,7 +10,6 @@ public final class Product {
     private final String brand;
     private final String category;
     private final BigDecimal price;
-    private final int scale;
     private static int count;
 
     public Product(String name, String brand, String category, String price) {
@@ -27,7 +26,7 @@ public final class Product {
             Add try catch block around new Product creation.
          */
 
-        this.scale = 2;
+        int scale = 2;
 
         this.id = ++count;
         this.name = name;
@@ -65,14 +64,13 @@ public final class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id == product.id && scale == product.scale && Objects.equals(name, product.name) &&
-                Objects.equals(brand, product.brand) && Objects.equals(category, product.category) &&
-                Objects.equals(price, product.price);
+        return id == product.id && Objects.equals(name, product.name) && Objects.equals(brand, product.brand) &&
+                Objects.equals(category, product.category) && Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, brand, category, price, scale);
+        return Objects.hash(id, name, brand, category, price);
     }
 
     @Override
@@ -83,7 +81,6 @@ public final class Product {
                 ", brand='" + brand + '\'' +
                 ", category='" + category + '\'' +
                 ", price=" + price +
-                ", scale=" + scale +
                 '}';
     }
 
