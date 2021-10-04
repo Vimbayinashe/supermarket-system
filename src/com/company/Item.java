@@ -11,8 +11,8 @@ public class Item  {
     private final String name;
     //    private final String brand; //todo: is brand necessary?
     private final String category;
-    private final BigDecimal price;
-    private final int quantity;
+    private BigDecimal price;
+    private int quantity;
 
 
     public Item(String name, String category, String price, int quantity) {
@@ -35,7 +35,7 @@ public class Item  {
         this.id = ++count;
         this.name = name;
         this.category = category;
-        this.price = (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);
+        this.price = convertPrice(price);
         this.quantity = quantity;
 
         //todo: Is it necessary to store price as BigDecimal? (as according to article)
@@ -57,6 +57,10 @@ public class Item  {
 
     public String price() {
         return price.toPlainString();
+    }
+
+    public void price(String price) {
+        this.price = convertPrice(price);
     }
 
     public int quantity() {
@@ -86,6 +90,11 @@ public class Item  {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    private BigDecimal convertPrice(String price) {
+        int scale = 2;
+        return (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);
     }
 
 
