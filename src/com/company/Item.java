@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-public class Item  {
+public class Item {
     private static int count;
 
     private final int id;
@@ -27,10 +27,10 @@ public class Item  {
 
             Invalid argument should throw an error
 
+            => create Guards & re-use code in price & quantity setters
+
             Add try catch block around new Product creation.
          */
-
-        int scale = 2;
 
         this.id = ++count;
         this.name = name;
@@ -38,8 +38,8 @@ public class Item  {
         this.price = convertPrice(price);
         this.quantity = quantity;
 
+
         //todo: Is it necessary to store price as BigDecimal? (as according to article)
-        // input String datatype for price -> convert to BigDecimal.
 
     }
 
@@ -60,11 +60,27 @@ public class Item  {
     }
 
     public void price(String price) {
-        this.price = convertPrice(price);
+        try {
+            if (Integer.parseInt(price) < 0)
+                throw new IllegalArgumentException("Item's price cannot be set to a value less than zero.");
+            this.price = convertPrice(price);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Price could not be converted to a valid number.");
+        }
     }
 
     public int quantity() {
         return quantity;
+    }
+
+    public void increaseQuantity(int value) {
+        this.quantity += value;
+    }
+
+    public void decreaseQuantity(int value) {
+        if (this.quantity == 0 || value > this.quantity)
+            throw new IllegalArgumentException("There is insufficient stock for this transaction");
+        this.quantity -= value;
     }
 
     @Override
@@ -99,9 +115,9 @@ public class Item  {
 
 
     public static void main(String[] args) {
-        Product product = new Product("Läsk", "cheese", "-1");
+        Item product = new Item("Läsk", "cheese", "1.5", 50);
         System.out.println(product);
-        System.out.println(product.hashCode());
+        System.out.println(Double.parseDouble(product.price()) * 1.5);
     }
 }
 
