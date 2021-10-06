@@ -47,8 +47,9 @@ public class Categories {
         return !categories.contains(new Category(query));
     }
 
-
-
+    public void printCategoriesAsNumberedList() {
+        categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
+    }
 
     @Override
     public String toString() {
@@ -61,7 +62,7 @@ public class Categories {
         Categories categories = new Categories();
         System.out.println(categories);
 
-//        categories.printCategoriesAsNumberedList();
+        categories.printCategoriesAsNumberedList();
         System.out.println(categories.doesNotContain("cake"));
 
     }
@@ -69,8 +70,6 @@ public class Categories {
 }
 
 //todo:
-/*  public void printCategoriesAsNumberedList() {
-        categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
-    }
+/*
  * adding new category -> english only, convert ot lowerCase & verify for duplicates
  */
