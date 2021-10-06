@@ -15,8 +15,6 @@ public class Categories {
 
     private Set<Category> initialCategories() {
 
-        //ArrayList -> can be accessed using index number e.g. choosing category for a new food item
-        //          -> can add new category
 
         //todo: add more categories
 
@@ -55,7 +53,6 @@ public class Categories {
         System.out.println(categories);
 
         System.out.println(categories.doesNotContain("cake"));
-
 
     }
 

@@ -34,6 +34,9 @@ public class Item {
             Add try catch block around new Product creation.
          */
 
+        //todo: verify that categories contains suggested category before creating a new Category
+
+
         this.id = ++count;
         this.name = name;
         this.category = new Category(category);
