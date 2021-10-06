@@ -1,46 +1,46 @@
 package com.company;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Categories {
 
     //todo: maybe just Collection instead of List & List.of instead of ArrayList?
-    private final List<String> categories;
+    private final Set<Category> categories;
 
     Categories() {
         categories = initialCategories();
     }
 
-    private List<String> initialCategories() {
+    private Set<Category> initialCategories() {
 
         //ArrayList -> can be accessed using index number e.g. choosing category for a new food item
         //          -> can add new category
 
         //todo: add more categories
 
-        List<String> categories = new ArrayList<>();
+        Set<Category> categories =  new HashSet<>();
 
-        categories.add("bread");
-        categories.add("milk");
-        categories.add("meat");
-        categories.add("dry ingredients");
-        categories.add("tinned food");
-        categories.add("fruit");
-        categories.add("vegetables");
+        categories.add(new Category("bread"));
+        categories.add(new Category("milk"));
+        categories.add(new Category("meat"));
+        categories.add(new Category("dry ingredients"));
+        categories.add(new Category("tinned food"));
+        categories.add(new Category("fruit"));
+        categories.add(new Category("vegetables"));
 
         return categories;
     }
 
-    public List<String> categories() {
+    //todo: is this being used?
+    public List<Category> copyOfCategories() {
         return List.copyOf(categories);
-//        return Collections.unmodifiableList(categories);
     }
 
-    //Overkill: List already has contains() method
-//    public boolean contains(String query) {
-//        return categories.contains(query);
-//    }
+    public boolean doesNotContain(String query) {
+        return !categories.contains(new Category(query));
+    }
 
 
     @Override
@@ -53,6 +53,10 @@ public class Categories {
     public static void main(String[] args) {
         Categories categories = new Categories();
         System.out.println(categories);
+
+        System.out.println(categories.doesNotContain("cake"));
+
+
     }
 
 }

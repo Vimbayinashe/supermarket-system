@@ -10,7 +10,7 @@ public class Item {
     private final int id;
     private final String name;
     //    private final String brand; //todo: is brand necessary?
-    private final String category;
+    private final Category category;
     private BigDecimal price;
     private int quantity;
 
@@ -34,7 +34,7 @@ public class Item {
 
         this.id = ++count;
         this.name = name;
-        this.category = category;
+        this.category = new Category(category);
         this.price = convertPrice(price);
         this.quantity = quantity;
 
@@ -51,7 +51,7 @@ public class Item {
         return name;
     }
 
-    public String category() {
+    public Category category() {
         return category;
     }
 
