@@ -1,6 +1,9 @@
 package com.company;
 
 import com.company.categories.Categories;
+import com.company.categories.Category;
+import com.company.products.DefaultProducts;
+import com.company.products.Item;
 import com.company.products.Products;
 import com.company.products.Stock;
 
@@ -20,11 +23,13 @@ public class Main {
 
 
         //try to read from file
+            // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
             //if files present -> update categories (!first), stock and products
 
             //else fill in details from initial default values
         defaultCategoriesProductsAndStock();
 
+        products.printProductsAsNumberedList(); //todo: print as "fancy" list 
 
 
 
@@ -35,9 +40,20 @@ public class Main {
     }
 
     public static void defaultCategoriesProductsAndStock() {
-        //default categories
         categories.defaultCategories();
-        products.initialStock();
+
+        DefaultProducts defaultProducts = new DefaultProducts();
+
+        defaultProducts.products().forEach(product -> {
+            if(categories.doesNotContain(product[3]))
+                throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
+
+            //add guards -> long, int & price > 0,         //todo: what to do if invalid arguments?
+            stock.addProduct(Long.parseLong(product[0]), Integer.parseInt(product[5]));
+            products.addProduct(
+                    new Item(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]), product[4])
+            );
+        });
 
     }
 

@@ -14,6 +14,8 @@ public class Stock {
     public void addProduct(Long barcode, Integer quantity) {
         if (stockList.containsKey(barcode))
             throw new IllegalArgumentException("Product already exists in stock");
+        if (quantity < 1)
+            throw new IllegalArgumentException("Product's quantity is less than 1");
         stockList.put(barcode, quantity);
     }
 

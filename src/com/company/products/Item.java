@@ -13,10 +13,9 @@ public class Item {
     private final String brand;
     private final Category category;
     private BigDecimal price;
-    private int quantity;
 
 
-    public Item(long barcode, String name, String brand, Category category, String price, int quantity) {
+    public Item(long barcode, String name, String brand, Category category, String price) {
 
         //todo: add Guard.Against  the following
         /*
@@ -42,8 +41,6 @@ public class Item {
         this.brand = brand;
         this.category = category;
         this.price = convertPrice(price);
-        this.quantity = quantity;
-
 
         //todo: Is it necessary to store price as BigDecimal? (as according to article)
 
@@ -69,10 +66,6 @@ public class Item {
         return price.toPlainString();
     }
 
-    public int quantity() {
-        return quantity;
-    }
-
     public void price(String price) {
         try {
             if (Integer.parseInt(price) < 0)
@@ -83,40 +76,28 @@ public class Item {
         }
     }
 
-    public void increaseQuantity(int value) {
-        this.quantity += value;
-    }
-
-    public void decreaseQuantity(int value) {
-        if (this.quantity == 0 || value > this.quantity)
-            throw new IllegalArgumentException("There is insufficient stock for this transaction");
-        this.quantity -= value;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return barcode == item.barcode && quantity == item.quantity && Objects.equals(name, item.name)
-                && Objects.equals(brand, item.brand) && Objects.equals(category, item.category)
-                && Objects.equals(price, item.price);
+        return barcode == item.barcode && Objects.equals(name, item.name) && Objects.equals(brand, item.brand)
+                && Objects.equals(category, item.category) && Objects.equals(price, item.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(barcode, name, brand, category, price, quantity);
+        return Objects.hash(barcode, name, brand, category, price);
     }
 
     @Override
     public String toString() {
-        return "Item {" +
+        return "Item{" +
                 "barcode=" + barcode +
                 ", name='" + name + '\'' +
                 ", brand='" + brand + '\'' +
                 ", category=" + category +
                 ", price=" + price +
-                ", quantity=" + quantity +
                 '}';
     }
 
@@ -128,7 +109,7 @@ public class Item {
 
     public static void main(String[] args) {
         Category cheese = new Category("cheese");
-        Item product = new Item(558895651122L, "Läsk", "Mazoe", cheese, "1.5", 50);
+        Item product = new Item(558895651122L, "Läsk", "Mazoe", cheese, "1.5");
         System.out.println(product);
         System.out.println(Double.parseDouble(product.price()) * 1.5);
     }
