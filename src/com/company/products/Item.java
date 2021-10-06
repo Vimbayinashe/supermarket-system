@@ -1,4 +1,6 @@
-package com.company;
+package com.company.products;
+
+import com.company.categories.Category;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
