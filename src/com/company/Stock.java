@@ -1,29 +1,30 @@
 package com.company;
 
 import java.util.List;
-import java.util.Map;
 
 public class Stock {
-    private static Map<String, Integer> stock;
+    private static List<Item> stock;
 
 
-    //initial stock
-//    private Map<String, Integer> initialStock() {
-//        return
-//    }
-
-    //add stock
+    //initial stock -> read from file
 
 
-    //get stock
+    //add a stock item
+
+
+    //remove a stock item
+
+
+    // save changes to file
+        // ?? when stock quantity changes, item added or item removed or any of the three?
 
 
 
 
-    //todo: consider removing product name - but name is good, reduces risk of accidentally altering wrong item.
+    //todo:
 
     /*
-    * private constructor -> cannot create new instances, only one stock object
+    * private constructor -> cannot create new instances, only one stock object?
     *
      */
 }

@@ -18,6 +18,7 @@ public class Categories {
         //          -> can add new category
 
         //todo: add more categories
+
         List<String> categories = new ArrayList<>();
 
         categories.add("bread");
@@ -40,6 +41,19 @@ public class Categories {
 //    public boolean contains(String query) {
 //        return categories.contains(query);
 //    }
+
+
+    @Override
+    public String toString() {
+        return "Categories{" +
+                "categories=" + categories +
+                '}';
+    }
+
+    public static void main(String[] args) {
+        Categories categories = new Categories();
+        System.out.println(categories);
+    }
 
 }
 
