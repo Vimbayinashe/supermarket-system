@@ -97,3 +97,8 @@ public class Main {
 *   product details -> create new item in Products (list of available products)
 *   product.barcode & quantity -> added to Stock
  */
+
+/*
+*   check that quantity > 0 && quantity-purchase > 0
+*   check that "new" product barcode is not present in stock   &   product Item is not present in Products (list)
+ */
