@@ -2,13 +2,14 @@ package com.company.categories;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Categories {
 
     //todo: maybe just Collection instead of List & List.of instead of ArrayList?
     private final List<Category> categories;
 
-    Categories() {
+    public Categories() {
         categories = initialCategories();
     }
 
@@ -43,6 +44,12 @@ public class Categories {
 
     public List<Category> categories() {
         return List.copyOf(categories);
+    }
+
+    public List<String> categoryArrays() {
+        return categories.stream()
+                .map(category -> category.name())
+                .collect(Collectors.toList());
     }
 
     public boolean doesNotContain(String query) {
