@@ -7,17 +7,16 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 public class Item {
-    private static int count;
 
-    private final int id;
+    private final long barcode;
     private final String name;
-    //    private final String brand; //todo: is brand necessary?
+    private final String brand;
     private final Category category;
     private BigDecimal price;
     private int quantity;
 
 
-    public Item(String name, String category, String price, int quantity) {
+    public Item(long barcode, String name, String brand, String category, String price, int quantity) {
 
         //todo: add Guard.Against  the following
         /*
@@ -37,8 +36,9 @@ public class Item {
         //todo: verify that categories contains suggested category before creating a new Category
 
 
-        this.id = ++count;
+        this.barcode = barcode;
         this.name = name;
+        this.brand = brand;
         this.category = new Category(category);
         this.price = convertPrice(price);
         this.quantity = quantity;
@@ -48,8 +48,12 @@ public class Item {
 
     }
 
-    public int id() {
-        return id;
+    public long barcode() {
+        return barcode;
+    }
+
+    public String brand() {
+        return brand;
     }
 
     public String name() {
@@ -93,21 +97,23 @@ public class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return id == item.id && quantity == item.quantity && Objects.equals(name, item.name) &&
-                Objects.equals(category, item.category) && Objects.equals(price, item.price);
+        return barcode == item.barcode && quantity == item.quantity && Objects.equals(name, item.name)
+                && Objects.equals(brand, item.brand) && Objects.equals(category, item.category)
+                && Objects.equals(price, item.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, category, price, quantity);
+        return Objects.hash(barcode, name, brand, category, price, quantity);
     }
 
     @Override
     public String toString() {
-        return "Item{" +
-                "id=" + id +
+        return "Item {" +
+                "barcode=" + barcode +
                 ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                ", category=" + category +
                 ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
@@ -120,9 +126,9 @@ public class Item {
 
 
     public static void main(String[] args) {
-        Item product = new Item("Läsk", "cheese", "1.5", 50);
-        System.out.println(product);
-        System.out.println(Double.parseDouble(product.price()) * 1.5);
+//        Item product = new Item(558895651122, "Läsk", "cheese", "1.5", 50);
+//        System.out.println(product);
+//        System.out.println(Double.parseDouble(product.price()) * 1.5);
     }
 }
 
