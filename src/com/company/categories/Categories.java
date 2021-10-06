@@ -46,9 +46,15 @@ public class Categories {
         return List.copyOf(categories);
     }
 
-    public List<String> categoryArrays() {
+    public List<String> categoriesAsListOfStrings() {
         return categories.stream()
-                .map(category -> category.name())
+                .map(Category::name)
+                .collect(Collectors.toList());
+    }
+
+    public List<String []> categoriesAsArraysOfStrings() {
+        return categories.stream()
+                .map(category -> new String[] {category.name()})
                 .collect(Collectors.toList());
     }
 
@@ -58,6 +64,10 @@ public class Categories {
 
     public void printCategoriesAsNumberedList() {
         categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
+    }
+
+    public Category getCategory(int position) {
+        return categories.get(position - 1);
     }
 
     @Override

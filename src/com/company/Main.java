@@ -1,25 +1,29 @@
 package com.company;
 
 import com.company.categories.Categories;
+import com.company.products.Item;
+import com.company.products.Stock;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        //save files to csv
         Categories categories = new Categories();
+        Stock stock = new Stock();
 
-        saveFile(categories.categoryArrays());
+
+        saveFile(categories.categoriesAsListOfStrings());
 
     }
 
-    public static void saveFile (List<String> file) {
+    public static void saveFile (List<String> list) {
         String homeFolder = System.getProperty("user.home");
         Path path = Path.of(homeFolder, "store", "categories-1.csv");
 
@@ -33,16 +37,15 @@ public class Main {
             e.printStackTrace();
         }
 
+        //try (Stream<String> file = list.stream() ){       //there must be sth streamable here
         try{
-            //Files.write(path, file);
-            Files.write(path, file);
+            Files.write(path, list);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //todo: currently not working
-    //method is supposed to increase file suffix by 1 letter
+    //method is supposed to increase file suffix by 1 letter : currently not working
     private static Path createPath(String homeFolder,String folder, String fileName) {
         Path path = Path.of(homeFolder, folder, fileName);
 
@@ -57,6 +60,10 @@ public class Main {
             path = Path.of(homeFolder, folder, newName);
         }
         return path;
+    }
+
+    private static List<Item> initialStock() {
+
     }
 }
 
@@ -77,7 +84,13 @@ public class Main {
 *   -> choose an int as input value (that represents product key in Hashmap) to choose a category
 *   add / save new product to file?
 *
-*
+*    //save files to csv
 *
 
+ */
+
+/*
+*   Creating new products
+*   check user input for correct values & give feedback / don't attempt to create new items & crash your program
+*       - int(price), long(barcode), valid category
  */

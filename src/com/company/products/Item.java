@@ -21,6 +21,7 @@ public class Item {
         //todo: add Guard.Against  the following
         /*
             category - is an element of Categories List / printout available category options b4 sm1 adds a product
+            barcode is a valid long
             Cast to double is a valid double, price.asDouble > 0, price has maximum 2 decimal places
             name, brand, category, price != null
             name != empty string ""
