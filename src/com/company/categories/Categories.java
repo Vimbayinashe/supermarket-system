@@ -14,9 +14,6 @@ public class Categories {
 
     private List<Category> initialCategories() {
 
-
-        //todo: add more categories
-
         List<Category> categories =  new ArrayList<>();
 
         categories.add(new Category("bakery"));
@@ -33,13 +30,18 @@ public class Categories {
         categories.add(new Category("health"));
         categories.add(new Category("beauty"));
 
-
-
         return categories;
     }
 
-    //todo: is this being used?
-    public List<Category> copyOfCategories() {
+    public void addCategory(String name) {
+        String formattedName = name.toLowerCase();
+        if (categories.contains(new Category(formattedName)))
+            throw new IllegalArgumentException(name + " category already exists.");
+        categories.add(new Category(formattedName));
+    }
+
+
+    public List<Category> categories() {
         return List.copyOf(categories);
     }
 
@@ -65,11 +67,15 @@ public class Categories {
         categories.printCategoriesAsNumberedList();
         System.out.println(categories.doesNotContain("cake"));
 
+        categories.addCategory("MEATS");
+        categories.printCategoriesAsNumberedList();
+        //categories.addCategory("toys");
+
     }
 
 }
 
 //todo:
 /*
- * adding new category -> english only, convert ot lowerCase & verify for duplicates
+ * adding new category -> english only, check current list first <= request user
  */
