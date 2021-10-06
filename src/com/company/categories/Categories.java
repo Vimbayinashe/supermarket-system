@@ -1,24 +1,23 @@
 package com.company.categories;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Categories {
 
     //todo: maybe just Collection instead of List & List.of instead of ArrayList?
-    private final Set<Category> categories;
+    private final List<Category> categories;
 
     Categories() {
         categories = initialCategories();
     }
 
-    private Set<Category> initialCategories() {
+    private List<Category> initialCategories() {
 
 
         //todo: add more categories
 
-        Set<Category> categories =  new HashSet<>();
+        List<Category> categories =  new ArrayList<>();
 
         categories.add(new Category("bakery"));
         categories.add(new Category("dairy products"));
@@ -34,6 +33,8 @@ public class Categories {
         categories.add(new Category("health"));
         categories.add(new Category("beauty"));
 
+
+
         return categories;
     }
 
@@ -47,6 +48,8 @@ public class Categories {
     }
 
 
+
+
     @Override
     public String toString() {
         return "Categories{" +
@@ -58,6 +61,7 @@ public class Categories {
         Categories categories = new Categories();
         System.out.println(categories);
 
+//        categories.printCategoriesAsNumberedList();
         System.out.println(categories.doesNotContain("cake"));
 
     }
@@ -65,6 +69,8 @@ public class Categories {
 }
 
 //todo:
-/*
+/*  public void printCategoriesAsNumberedList() {
+        categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
+    }
  * adding new category -> english only, convert ot lowerCase & verify for duplicates
  */

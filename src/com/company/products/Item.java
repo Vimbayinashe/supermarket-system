@@ -16,7 +16,7 @@ public class Item {
     private int quantity;
 
 
-    public Item(long barcode, String name, String brand, String category, String price, int quantity) {
+    public Item(long barcode, String name, String brand, Category category, String price, int quantity) {
 
         //todo: add Guard.Against  the following
         /*
@@ -39,7 +39,7 @@ public class Item {
         this.barcode = barcode;
         this.name = name;
         this.brand = brand;
-        this.category = new Category(category);
+        this.category = category;
         this.price = convertPrice(price);
         this.quantity = quantity;
 
@@ -126,7 +126,8 @@ public class Item {
 
 
     public static void main(String[] args) {
-        Item product = new Item(558895651122L, "Läsk", "Mazoe", "cheese", "1.5", 50);
+        Category cheese = new Category("cheese");
+        Item product = new Item(558895651122L, "Läsk", "Mazoe", cheese, "1.5", 50);
         System.out.println(product);
         System.out.println(Double.parseDouble(product.price()) * 1.5);
     }
