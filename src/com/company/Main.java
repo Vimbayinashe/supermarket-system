@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.categories.Categories;
 import com.company.products.Products;
+import com.company.products.Stock;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,16 +11,33 @@ import java.util.List;
 
 public class Main {
 
+    static Categories categories = new Categories();
+    static Products products = new Products();
+    static Stock stock = new Stock();
+
     public static void main(String[] args) {
 
-        Categories categories = new Categories();
-        Products products = new Products();
-        products.initialStock();
+
+
+        //try to read from file
+            //if files present -> update categories (!first), stock and products
+
+            //else fill in details from initial default values
+        defaultCategoriesProductsAndStock();
+
+
 
 
 
 
         saveFile(categories.categoriesAsListOfStrings());
+
+    }
+
+    public static void defaultCategoriesProductsAndStock() {
+        //default categories
+        categories.defaultCategories();
+        products.initialStock();
 
     }
 

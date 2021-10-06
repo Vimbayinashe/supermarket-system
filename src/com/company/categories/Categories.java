@@ -7,15 +7,15 @@ import java.util.stream.Collectors;
 public class Categories {
 
     //todo: maybe just Collection instead of List & List.of instead of ArrayList?
-    private final List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
-    public Categories() {
-        categories = initialCategories();
-    }
+//    public Categories() {
+//        categories = initialCategories();
+//    }
 
-    private List<Category> initialCategories() {
+    public void defaultCategories() {
 
-        List<Category> categories =  new ArrayList<>();
+//        List<Category> categories =  new ArrayList<>();
 
         categories.add(new Category("bakery"));
         categories.add(new Category("dairy products"));
@@ -31,7 +31,7 @@ public class Categories {
         categories.add(new Category("health"));
         categories.add(new Category("beauty"));
 
-        return categories;
+//        return categories;
     }
 
     public void addCategory(String name) {
