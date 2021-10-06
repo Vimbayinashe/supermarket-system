@@ -1,22 +1,22 @@
 package com.company;
 
 import com.company.categories.Categories;
-import com.company.products.Item;
-import com.company.products.Stock;
+import com.company.products.Products;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) {
 
         Categories categories = new Categories();
-        Stock stock = new Stock();
+        Products products = new Products();
+        products.initialStock();
+
+
 
 
         saveFile(categories.categoriesAsListOfStrings());
@@ -62,9 +62,9 @@ public class Main {
         return path;
     }
 
-    private static List<Item> initialStock() {
-
-    }
+//    private static List<Item> initialStock() {
+//
+//    }
 }
 
 
@@ -93,4 +93,7 @@ public class Main {
 *   Creating new products
 *   check user input for correct values & give feedback / don't attempt to create new items & crash your program
 *       - int(price), long(barcode), valid category
+*
+*   product details -> create new item in Products (list of available products)
+*   product.barcode & quantity -> added to Stock
  */
