@@ -20,13 +20,19 @@ public class Categories {
 
         Set<Category> categories =  new HashSet<>();
 
-        categories.add(new Category("bread"));
-        categories.add(new Category("milk"));
-        categories.add(new Category("meat"));
-        categories.add(new Category("dry ingredients"));
-        categories.add(new Category("tinned food"));
-        categories.add(new Category("fruit"));
-        categories.add(new Category("vegetables"));
+        categories.add(new Category("bakery"));
+        categories.add(new Category("dairy products"));
+        categories.add(new Category("meat and poultry"));
+        categories.add(new Category("frozen foods"));
+        categories.add(new Category("food cupboard"));
+        categories.add(new Category("fruit and vegetables"));
+        categories.add(new Category("drinks"));
+        categories.add(new Category("sweets and ice-cream"));
+        categories.add(new Category("garden"));
+        categories.add(new Category("toys"));
+        categories.add(new Category("household"));
+        categories.add(new Category("health"));
+        categories.add(new Category("beauty"));
 
         return categories;
     }

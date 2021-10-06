@@ -68,6 +68,10 @@ public class Item {
         return price.toPlainString();
     }
 
+    public int quantity() {
+        return quantity;
+    }
+
     public void price(String price) {
         try {
             if (Integer.parseInt(price) < 0)
@@ -76,10 +80,6 @@ public class Item {
         } catch (Exception e) {
             throw new IllegalArgumentException("Price could not be converted to a valid number.");
         }
-    }
-
-    public int quantity() {
-        return quantity;
     }
 
     public void increaseQuantity(int value) {
@@ -126,9 +126,9 @@ public class Item {
 
 
     public static void main(String[] args) {
-//        Item product = new Item(558895651122, "Läsk", "cheese", "1.5", 50);
-//        System.out.println(product);
-//        System.out.println(Double.parseDouble(product.price()) * 1.5);
+        Item product = new Item(558895651122L, "Läsk", "Mazoe", "cheese", "1.5", 50);
+        System.out.println(product);
+        System.out.println(Double.parseDouble(product.price()) * 1.5);
     }
 }
 
