@@ -29,7 +29,8 @@ public class Main {
             //if files present -> update categories (!first), stock and products
 
             //else fill in details from initial default values
-            categories.defaultCategories();
+            //todo: move defaultCategories method to Main - returns an ArrayList
+            categories = defaultCategories();
             try {       //does this interrupt the result of both methods if one of them has a problem
                 products = defaultProducts(defaultProducts, categories);
                 stock = defaultStock(defaultProducts, categories);
@@ -53,6 +54,26 @@ public class Main {
         saveFile(categories.categoriesAsListOfStrings());
         //saveFile(List.of("five,six,seven", "eight,nine,zero", "ten,twelve,eleven")); //saving 3 rows x 3 columns
 
+    }
+
+    private static Categories defaultCategories() {
+        Categories categories = new Categories();
+
+        categories.addCategory("bakery");
+        categories.addCategory("dairy products");
+        categories.addCategory("meat and poultry");
+        categories.addCategory("frozen foods");
+        categories.addCategory("food cupboard");
+        categories.addCategory("fruit and vegetables");
+        categories.addCategory("drinks");
+        categories.addCategory("sweets and ice-cream");
+        categories.addCategory("garden");
+        categories.addCategory("toys");
+        categories.addCategory("household");
+        categories.addCategory("health");
+        categories.addCategory("beauty");
+
+        return categories;
     }
 
     private static Stock defaultStock(DefaultProducts defaultProducts, Categories categories) {
