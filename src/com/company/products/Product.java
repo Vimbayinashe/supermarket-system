@@ -41,9 +41,6 @@ public class Product {
         this.brand = brand;
         this.category = category;
         this.price = convertPrice(price);
-
-        //todo: Is it necessary to store price as BigDecimal? (as according to article)
-
     }
 
     public long barcode() {
@@ -103,7 +100,7 @@ public class Product {
     }
 
     public String toDisplayString() {
-        return  name + " " + brand + " - " + price.toPlainString().replace('.', ',') + "kr";
+        return  brand + " " + name + " - " + price.toPlainString().replace('.', ',') + " kr";
     }
 
 
@@ -115,5 +112,5 @@ public class Product {
     }
 }
 
-//NB: use BigDecimal(String) to avoid loss of accuracy similar to using floats & doubles
+//NB: using BigDecimal(String) to avoid loss of accuracy similar to using floats & doubles
 

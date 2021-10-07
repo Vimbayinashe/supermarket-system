@@ -9,7 +9,12 @@ public class Products {
 
     //todo: getProduct by index or barcode instead? => if so, how to get index when given barcode
 
-    public Product getProduct(int index) {
+
+    public Product getProductByBarcode(int index) {
+        return stock.get(index);
+    }
+
+    public Product getProductByIndex(int index) {
         return stock.get(index);
     }
 

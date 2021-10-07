@@ -28,8 +28,8 @@ public class Main {
             //else fill in details from initial default values
             categories = defaultCategories();
             try {       //does this interrupt the result of both methods if one of them has a problem
-                products = defaultProducts(defaultProducts, categories);
-                stock = defaultStock(defaultProducts, categories);
+                products = defaultProducts(defaultProducts.products(), categories);
+                stock = defaultStock(defaultProducts.products(), categories);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -74,10 +74,10 @@ public class Main {
         return categories;
     }
 
-    private static Stock defaultStock(DefaultProducts defaultProducts, Categories categories) {
+    private static Stock defaultStock(List<String[]> products, Categories categories) {
         Stock stock = new Stock();
 
-        defaultProducts.products().forEach(product -> {
+        products.forEach(product -> {
 
             if(categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
@@ -93,10 +93,11 @@ public class Main {
         return stock;
     }
 
-    public static Products defaultProducts(DefaultProducts defaultProducts, Categories categories) {
+    public static Products defaultProducts(List<String[]> defaultProducts, Categories categories) {
         Products products = new Products();
 
-        defaultProducts.products().forEach(product -> {
+        //change to a stream?
+        defaultProducts.forEach(product -> {
             if(categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
 
