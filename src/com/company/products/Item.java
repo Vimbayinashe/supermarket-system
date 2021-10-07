@@ -101,6 +101,10 @@ public class Item {
                 '}';
     }
 
+    public String toDisplayString() {
+        return  name + " " + brand + " - " + price.toPlainString().replace('.', ',') + "kr";
+    }
+
     private BigDecimal convertPrice(String price) {
         int scale = 2;
         return (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);

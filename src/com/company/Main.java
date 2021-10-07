@@ -29,13 +29,20 @@ public class Main {
             //else fill in details from initial default values
         defaultCategoriesProductsAndStock();
 
-        products.printProductsAsNumberedList(); //todo: print as "fancy" list 
+        products.printProductsAsNumberedList(); //todo: print as "fancy" list
 
 
 
-
+        /*
+        *   create a new List<String []> populated by a stream
+        *       products.stream.map(item -> new String[](a, b , c, d.toString, e. stock.get(a) )).toList
+        *       Save to csv file.
+        *
+        *   test: saving csv file from a List<String []>
+         */
 
         saveFile(categories.categoriesAsListOfStrings());
+        //saveFile(List.of("five,six,seven", "eight,nine,zero", "ten,twelve,eleven")); //saving 3 rows x 3 columns
 
     }
 

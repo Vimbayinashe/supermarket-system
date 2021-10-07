@@ -1,7 +1,5 @@
 package com.company.products;
 
-import com.company.categories.Category;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class Products {
     }
 
     public void printProductsAsNumberedList() {
-        stock.forEach(category -> System.out.println((stock.indexOf(category) + 1) + " " + category));
+        stock.forEach(category -> System.out.println((stock.indexOf(category) + 1) + " " + category.toDisplayString()));
     }
 
 
