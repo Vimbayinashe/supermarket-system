@@ -23,10 +23,6 @@ public class Products {
     }
 
 
-    //remove a stock item
-
-
-
     // save changes to file
         // ?? when stock quantity changes, item added or item removed or any of the three?
 

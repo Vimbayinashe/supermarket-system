@@ -1,4 +1,4 @@
-package com.company.products;
+package com.company.stock;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -5,21 +5,24 @@ import com.company.categories.Category;
 import com.company.products.DefaultProducts;
 import com.company.products.Item;
 import com.company.products.Products;
-import com.company.products.Stock;
+import com.company.stock.Stock;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
-    static Categories categories = new Categories();
-    static Products products = new Products();
-    static Stock stock = new Stock();
+
+
 
     public static void main(String[] args) {
-
+        Categories categories = new Categories();
+        Products products = new Products();
+        Stock stock = new Stock();
+        DefaultProducts defaultProducts = new DefaultProducts();
 
 
         //try to read from file
@@ -27,9 +30,16 @@ public class Main {
             //if files present -> update categories (!first), stock and products
 
             //else fill in details from initial default values
-        defaultCategoriesProductsAndStock();
+            categories.defaultCategories();
+            try {       //does this interrupt the result of both methods if one of them has a problem
+                products = defaultProducts(defaultProducts, categories);
+                stock = defaultStock(defaultProducts, categories);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        products.printProductsAsNumberedList(); //todo: print as "fancy" list
+
+        products.printProductsAsNumberedList();
 
 
 
@@ -46,23 +56,41 @@ public class Main {
 
     }
 
-    public static void defaultCategoriesProductsAndStock() {
-        categories.defaultCategories();
+    private static Stock defaultStock(DefaultProducts defaultProducts, Categories categories) {
+        Stock stock = new Stock();
 
-        DefaultProducts defaultProducts = new DefaultProducts();
+        defaultProducts.products().forEach(product -> {
+
+            if(categories.doesNotContain(product[3]))
+                throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
+
+            try {
+                stock.addProduct(Long.parseLong(product[0]), Integer.parseInt(product[5]));
+            }catch (NumberFormatException e) {
+                throw new NumberFormatException("Invalid barcode or quantity on product " + product[0]);
+            }
+        });
+        return stock;
+    }
+
+    public static Products defaultProducts(DefaultProducts defaultProducts, Categories categories) {
+        Products products = new Products();
 
         defaultProducts.products().forEach(product -> {
             if(categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
 
-            //add guards -> long, int & price > 0,         //todo: what to do if invalid arguments?
-            stock.addProduct(Long.parseLong(product[0]), Integer.parseInt(product[5]));
-            products.addProduct(
+            try {
+                products.addProduct(
                     new Item(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]), product[4])
-            );
+                );
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("Invalid barcode: " + product[0]);
+            }
         });
-
+        return products;
     }
+
 
     public static void saveFile (List<String> list) {
         String homeFolder = System.getProperty("user.home");
@@ -103,9 +131,6 @@ public class Main {
         return path;
     }
 
-//    private static List<Item> initialStock() {
-//
-//    }
 }
 
 
