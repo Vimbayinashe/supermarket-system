@@ -39,11 +39,9 @@ public class Stock {
         stockList.replace(barcode, newQuantity);
     }
 
-
     public Set<Map.Entry<Long, Integer>> listOfStock() {
         return stockList.entrySet();
     }
-
 
 
     public static void main(String[] args) {

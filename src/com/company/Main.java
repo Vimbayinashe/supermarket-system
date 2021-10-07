@@ -59,6 +59,7 @@ public class Main {
         categories.addCategory("dairy products");
         categories.addCategory("meat and poultry");
         categories.addCategory("frozen foods");
+        categories.addCategory("ready meals");
         categories.addCategory("food cupboard");
         categories.addCategory("fruit and vegetables");
         categories.addCategory("drinks");
@@ -66,6 +67,7 @@ public class Main {
         categories.addCategory("garden");
         categories.addCategory("toys");
         categories.addCategory("household");
+        categories.addCategory("toiletries");
         categories.addCategory("health");
         categories.addCategory("beauty");
 
