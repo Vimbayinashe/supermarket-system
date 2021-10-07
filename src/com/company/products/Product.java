@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-public class Item {
+public class Product {
 
     private final long barcode;
     private final String name;
@@ -15,7 +15,7 @@ public class Item {
     private BigDecimal price;
 
 
-    public Item(long barcode, String name, String brand, Category category, String price) {
+    public Product(long barcode, String name, String brand, Category category, String price) {
 
         //todo: add Guard.Against  the following
         /*
@@ -69,7 +69,7 @@ public class Item {
     public void price(String price) {
         try {
             if (Integer.parseInt(price) < 0)
-                throw new IllegalArgumentException("Item's price cannot be set to a value less than zero.");
+                throw new IllegalArgumentException("product's price cannot be set to a value less than zero.");
             this.price = convertPrice(price);
         } catch (Exception e) {
             throw new IllegalArgumentException("Price could not be converted to a valid number.");
@@ -80,9 +80,9 @@ public class Item {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Item item = (Item) o;
-        return barcode == item.barcode && Objects.equals(name, item.name) && Objects.equals(brand, item.brand)
-                && Objects.equals(category, item.category) && Objects.equals(price, item.price);
+        Product product = (Product) o;
+        return barcode == product.barcode && Objects.equals(name, product.name) && Objects.equals(brand, product.brand)
+                && Objects.equals(category, product.category) && Objects.equals(price, product.price);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
+        return "product{" +
                 "barcode=" + barcode +
                 ", name='" + name + '\'' +
                 ", brand='" + brand + '\'' +
@@ -113,7 +113,7 @@ public class Item {
 
     public static void main(String[] args) {
         Category cheese = new Category("cheese");
-        Item product = new Item(558895651122L, "Läsk", "Mazoe", cheese, "1.5");
+        Product product = new Product(558895651122L, "Läsk", "Mazoe", cheese, "1.5");
         System.out.println(product);
         System.out.println(Double.parseDouble(product.price()) * 1.5);
     }

@@ -3,14 +3,13 @@ package com.company;
 import com.company.categories.Categories;
 import com.company.categories.Category;
 import com.company.products.DefaultProducts;
-import com.company.products.Item;
+import com.company.products.Product;
 import com.company.products.Products;
 import com.company.stock.Stock;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -82,7 +81,7 @@ public class Main {
 
             try {
                 products.addProduct(
-                    new Item(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]), product[4])
+                    new Product(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]), product[4])
                 );
             } catch (NumberFormatException e) {
                 throw new NumberFormatException("Invalid barcode: " + product[0]);

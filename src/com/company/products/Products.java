@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Products {
 
-    private List<Item> stock = new ArrayList<>();
+    private List<Product> stock = new ArrayList<>();
 
     //todo: getProduct by index or barcode instead? => if so, how to get index when given barcode
 
-    public Item getProduct(int index) {
+    public Product getProduct(int index) {
         return stock.get(index);
     }
 
@@ -18,13 +18,13 @@ public class Products {
     }
 
 
-    public void addProduct(Item item) {
-        stock.add(item);
+    public void addProduct(Product product) {
+        stock.add(product);
     }
 
 
     // save changes to file
-        // ?? when stock quantity changes, item added or item removed or any of the three?
+        // ?? when stock quantity changes, product added or product removed or any of the three?
 
 }
 
