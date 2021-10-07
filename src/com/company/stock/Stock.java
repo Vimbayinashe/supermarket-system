@@ -1,5 +1,7 @@
 package com.company.stock;
 
+import com.company.products.Guard;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,12 +31,14 @@ public class Stock {
     }
 
     public void decreaseQuantity(Long barcode, int quantity) {
-        if (stockList.get(barcode) == 0 || stockList.get(barcode) < quantity)
-            throw new IllegalArgumentException("Amount in stock is less than the requested quantity.");
+        int currentQuantity = stockList.get(barcode);
+        Guard.Against.StockIsZero(barcode, currentQuantity);
+        Guard.Against.InsufficientStock(quantity, currentQuantity);
 
-        int newQuantity = stockList.get(barcode) - quantity;
+        int newQuantity = currentQuantity - quantity;
         stockList.replace(barcode, newQuantity);
     }
+
 
     public Set<Map.Entry<Long, Integer>> listOfStock() {
         return stockList.entrySet();

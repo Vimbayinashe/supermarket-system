@@ -14,9 +14,6 @@ import java.util.List;
 
 public class Main {
 
-
-
-
     public static void main(String[] args) {
         Categories categories = new Categories();
         Products products = new Products();
@@ -29,7 +26,6 @@ public class Main {
             //if files present -> update categories (!first), stock and products
 
             //else fill in details from initial default values
-            //todo: move defaultCategories method to Main - returns an ArrayList
             categories = defaultCategories();
             try {       //does this interrupt the result of both methods if one of them has a problem
                 products = defaultProducts(defaultProducts, categories);
@@ -83,11 +79,13 @@ public class Main {
 
             if(categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
+            //returna Optional -> som innehåller en kategorie eller empty
 
             try {
                 stock.addProduct(Long.parseLong(product[0]), Integer.parseInt(product[5]));
             }catch (NumberFormatException e) {
-                throw new NumberFormatException("Invalid barcode or quantity on product " + product[0]);
+                e.printStackTrace();
+                //throw new NumberFormatException("Invalid barcode or quantity on product " + product[0]);
             }
         });
         return stock;
@@ -138,15 +136,21 @@ public class Main {
     private static Path createPath(String homeFolder,String folder, String fileName) {
         Path path = Path.of(homeFolder, folder, fileName);
 
+
+        //testa använda datum+klockslagen för automatiskt sparning (nytt filnamn) men användaren väljer att spara kan
+        // man skriva över den gamla
+
         if(Files.exists(path)) {
             String currentName = String.valueOf(path.getFileName());
+
             int index = currentName.indexOf("-");
             int version = Integer.parseInt(String.valueOf(currentName.charAt(index + 1)));
+
             String newName = "categories-" + (version + 1) + ".csv";
 
             System.out.println(version);
 
-            path = Path.of(homeFolder, folder, newName);
+            return Path.of(homeFolder, folder, newName);
         }
         return path;
     }

@@ -67,13 +67,14 @@ public class Product {
     }
 
     public void price(String price) {
-        try {
-            if (Integer.parseInt(price) < 0)
-                throw new IllegalArgumentException("product's price cannot be set to a value less than zero.");
-            this.price = convertPrice(price);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Price could not be converted to a valid number.");
-        }
+        Guard.Against.InvalidPriceFormat(price);
+        Guard.Against.PriceLessThanZero(price);
+        this.price = convertPrice(price);
+    }
+
+    private BigDecimal convertPrice(String price) {
+        int scale = 2;
+        return (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);
     }
 
     @Override
@@ -103,11 +104,6 @@ public class Product {
 
     public String toDisplayString() {
         return  name + " " + brand + " - " + price.toPlainString().replace('.', ',') + "kr";
-    }
-
-    private BigDecimal convertPrice(String price) {
-        int scale = 2;
-        return (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);
     }
 
 
