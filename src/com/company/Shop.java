@@ -93,20 +93,23 @@ public class Shop {
          */
 
         saveFile(categories.listOfStrings(), "categories");
-        saveFile(List.of("seven,seven,seven", "two,two", "three,four,four"), "numbers");
-        //saveFile(List.of("five,six,seven", "eight,nine,zero", "ten,twelve,eleven")); //saving 3 rows x 3 columns
-        /*       // Convert elements to strings and concatenate them, separated by commas
-                 String joined = things.stream()
-                   .map(Object::toString)
-                   .collect(Collectors.joining(", "));
-         */
+        
+
+        List<String> combined = listOfProductsAndStock(products, stock);
+        combined.forEach(System.out::println);
+        saveFile(combined, "stock");
     }
 
+    private List<String> listOfProductsAndStock(Products products, Stock stock) {
+        return products.streamOfProducts()
+                .map(product -> product.toCommaSeparatedString() + "," + stock.getQuantity(product.barcode()))
+                .toList();
+    }
 
     public void saveFile(List<String> list, String name) {
         String fileName = name.concat(".csv");
         Path path = Path.of("resources", fileName);
-        
+
         try {
             Files.write(path, list);
         } catch (IOException e) {

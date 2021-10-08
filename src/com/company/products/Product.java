@@ -103,6 +103,10 @@ public class Product {
                 '}';
     }
 
+    public String toCommaSeparatedString() {
+        return barcode + "," + name + "," + brand + "," + category.name() + "," + price;
+    }
+
 
     public static void main(String[] args) {
         Category cheese = new Category("cheese");

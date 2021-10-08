@@ -5,6 +5,7 @@ import com.company.categories.Category;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Products {
 
@@ -94,6 +95,10 @@ public class Products {
         return products.stream()
                 .sorted(Comparator.comparing(Product::name).reversed())
                 .toList();
+    }
+
+    public Stream<Product> streamOfProducts() {
+        return products.stream();
     }
 
 
