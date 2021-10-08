@@ -46,10 +46,19 @@ public class Main {
         //remember -> return an Optional, handle successful result & no result (Optional.empty)
 
         //filtering price intervals
-        List<Product> priceFiltered = products.priceRange("0", "10.5");
+        /*List<Product> priceFiltered = products.priceRange("0", "10.5");
         printProductsCustomerView(priceFiltered);
         Long productBarcode = priceFiltered.get(2).barcode();
         System.out.println(productBarcode);
+        */
+
+        //filtering for a category
+        //user must choose a number from a list of categories => position
+        /* int position = 7;
+        Category selectedCategory = categories.getCategory(position);
+        List<Product> categoryFiltered = products.filterByCategory(selectedCategory);
+        printProductsCustomerView(categoryFiltered);
+         */
 
 
         /*
@@ -69,6 +78,11 @@ public class Main {
          */
 
     }
+
+//    private static List<Product> productsFilteredByCategory(Products products, Categories categories, int position) {
+//        Category
+//
+//    }
 
     public static void printProductsCustomerView(List<Product> products) {
         products.forEach(product -> printProduct(products.indexOf(product) + 1, product));

@@ -1,5 +1,7 @@
 package com.company.products;
 
+import com.company.categories.Category;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,10 @@ public class Products {
 
     private boolean priceRangeComparison(String start, String end, Double price) {
        return Double.parseDouble(start) <= price && price <= Double.parseDouble(end);
+    }
+
+    public List<Product> filterByCategory(Category category) {
+        return products.stream().filter(product -> product.category().equals(category)).toList();
     }
 
 
