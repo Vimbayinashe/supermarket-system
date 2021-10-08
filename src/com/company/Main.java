@@ -72,8 +72,9 @@ public class Main {
 
         //sort by price
 //        List<Product> sortedByPrice = products.sortByPriceAscending();
-        List<Product> sortedByPrice = products.sortByPriceDescending();
-        printProductsCustomerView(sortedByPrice);
+//        List<Product> sortedByPrice = products.sortByPriceDescending();
+//        List<Product> sortedByPrice = products.sortByBrandDescending();
+//        printProductsCustomerView(sortedByPrice);
 
 
         /*

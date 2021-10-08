@@ -71,6 +71,31 @@ public class Products {
                 .toList();
     }
 
+    public List<Product> sortByBrandAscending() {
+        return products.stream()
+                .sorted(Comparator.comparing(Product::brand))
+                .toList();
+    }
+
+    public List<Product> sortByBrandDescending() {
+        return products.stream()
+                .sorted(Comparator.comparing(Product::brand).reversed())
+                .toList();
+    }
+
+    //sorting by Product name: requires a different view with name, brand & price sequence
+    public List<Product> sortByNameAscending() {
+        return products.stream()
+                .sorted(Comparator.comparing(Product::name))
+                .toList();
+    }
+
+    public List<Product> sortByNameDescending() {
+        return products.stream()
+                .sorted(Comparator.comparing(Product::name).reversed())
+                .toList();
+    }
+
 
     // save changes to file
         // ?? when stock quantity changes, product added or product removed or any of the three?
