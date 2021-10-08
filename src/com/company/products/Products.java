@@ -43,6 +43,15 @@ public class Products {
         return products.stream().filter(product -> product.category().equals(category)).toList();
     }
 
+    public List<Product> filterByBrand(String brand) {
+        return products.stream()
+                .filter(product -> product.brand().equalsIgnoreCase(brand))
+                .toList();
+    }
+    
+    //Note: using startsWith to include for example ICA, ICA Basic & ICA Premium results in a search for ICA
+    //.filter(product -> product.brand().toLowerCase().startsWith(brand.toLowerCase()))
+
 
     // save changes to file
         // ?? when stock quantity changes, product added or product removed or any of the three?

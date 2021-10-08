@@ -60,6 +60,10 @@ public class Main {
         printProductsCustomerView(categoryFiltered);
          */
 
+        //filter by brand name
+        List<Product> brandFiltered = products.filterByBrand("Pop");
+        printProductsCustomerView(brandFiltered);
+
 
         /*
          *   create a new List<String []> populated by a stream
