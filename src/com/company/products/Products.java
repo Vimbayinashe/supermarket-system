@@ -25,6 +25,18 @@ public class Products {
         return List.copyOf(products);
     }
 
+    public List<Product> priceRange(String start, String  end) {
+        Guard.Against.InvalidPriceFormat(start);
+        Guard.Against.InvalidPriceFormat(end);
+        return products.stream()
+                .filter(product -> priceRangeComparison(start, end, product.priceAsDouble()))
+                .toList();
+    }
+
+    private boolean priceRangeComparison(String start, String end, Double price) {
+       return Double.parseDouble(start) <= price && price <= Double.parseDouble(end);
+    }
+
 
     // save changes to file
         // ?? when stock quantity changes, product added or product removed or any of the three?

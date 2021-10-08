@@ -63,6 +63,10 @@ public class Product {
         return price.toPlainString();
     }
 
+    public Double priceAsDouble() {
+        return Double.parseDouble(price.toPlainString());
+    }
+
     public void price(String price) {
         Guard.Against.InvalidPriceFormat(price);
         Guard.Against.PriceLessThanZero(price);
@@ -104,6 +108,7 @@ public class Product {
         Category cheese = new Category("cheese");
         Product product = new Product(558895651122L, "Läsk", "Mazoe", cheese, "1.5");
         System.out.println(product);
+        System.out.println("Price as double: " + product.priceAsDouble());
         System.out.println(Double.parseDouble(product.price()) * 1.5);
     }
 }

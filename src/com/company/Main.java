@@ -45,9 +45,11 @@ public class Main {
         // sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)
         //remember -> return an Optional, handle successful result & no result (Optional.empty)
 
-        var priceInterval = products.listOfProducts().stream()
-                .filter(product -> product )
-
+        //filtering price intervals
+        List<Product> priceFiltered = products.priceRange("0", "10.5");
+        printProductsCustomerView(priceFiltered);
+        Long productBarcode = priceFiltered.get(2).barcode();
+        System.out.println(productBarcode);
 
 
         /*
