@@ -22,34 +22,59 @@ public class Main {
 
 
         //try to read from file
-            // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
-            //if files present -> update categories (!first), stock and products
+        // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
+        //if files present -> update categories (!first), stock and products
 
-            //else fill in details from initial default values
-            categories = defaultCategories();
-            try {       //does this interrupt the result of both methods if one of them has a problem
-                products = defaultProducts(defaultProducts.products(), categories);
-                stock = defaultStock(defaultProducts.products(), categories);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        //else fill in details from initial default values
+        categories = defaultCategories();
+        try {       //does this interrupt the result of both methods if one of them has a problem
+            products = defaultProducts(defaultProducts.products(), categories);
+            stock = defaultStock(defaultProducts.products(), categories);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        //printing product list
+        //printProductsCustomerView(products.listOfProducts());
 
-        products.printProductsAsNumberedList();
+        //Search for product in Stock using barcode
+        System.out.println(products.getProduct(1).barcode());
+        System.out.println(products.productBarcode(1));
+
+        //todo: filtering, searching for price intervals, categories, product name/part of pdt name, brand
+        // sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)
+        //remember -> return an Optional, handle successful result & no result (Optional.empty)
+
+        var priceInterval = products.listOfProducts().stream()
+                .filter(product -> product )
 
 
 
         /*
-        *   create a new List<String []> populated by a stream
-        *       products.stream.map(item -> new String[](a, b , c, d.toString, e. stock.get(a) )).toList
-        *       Save to csv file.
-        *
-        *   test: saving csv file from a List<String []>
+         *   create a new List<String []> populated by a stream
+         *       products.stream.map(item -> new String[](a, b , c, d.toString, e. stock.get(a) )).toList
+         *       Save to csv file.
+         *
+         *   test: saving csv file from a List<String []>
          */
 
         saveFile(categories.categoriesAsListOfStrings());
         //saveFile(List.of("five,six,seven", "eight,nine,zero", "ten,twelve,eleven")); //saving 3 rows x 3 columns
+        /*       // Convert elements to strings and concatenate them, separated by commas
+                 String joined = things.stream()
+                   .map(Object::toString)
+                   .collect(Collectors.joining(", "));
+         */
 
+    }
+
+    public static void printProductsCustomerView(List<Product> products) {
+        products.forEach(product -> printProduct(products.indexOf(product) + 1, product));
+    }
+
+    public static void printProduct(int index, Product product) {
+        System.out.println(index + " " + product.brand() + " " + product.name() + " - "
+                + product.price().replace('.', ',') + " kr");
     }
 
     private static Categories defaultCategories() {
@@ -79,13 +104,13 @@ public class Main {
 
         products.forEach(product -> {
 
-            if(categories.doesNotContain(product[3]))
+            if (categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
             //returna Optional -> som innehåller en kategorie eller empty
 
             try {
                 stock.addProduct(Long.parseLong(product[0]), Integer.parseInt(product[5]));
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
                 //throw new NumberFormatException("Invalid barcode or quantity on product " + product[0]);
             }
@@ -98,12 +123,13 @@ public class Main {
 
         //change to a stream?
         defaultProducts.forEach(product -> {
-            if(categories.doesNotContain(product[3]))
+            if (categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
 
             try {
                 products.addProduct(
-                    new Product(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]), product[4])
+                        new Product(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]),
+                                product[4])
                 );
             } catch (NumberFormatException e) {
                 throw new NumberFormatException("Invalid barcode: " + product[0]);
@@ -113,7 +139,7 @@ public class Main {
     }
 
 
-    public static void saveFile (List<String> list) {
+    public static void saveFile(List<String> list) {
         String homeFolder = System.getProperty("user.home");
         Path path = Path.of(homeFolder, "store", "categories-1.csv");
 
@@ -128,7 +154,7 @@ public class Main {
         }
 
         //try (Stream<String> file = list.stream() ){       //there must be sth streamable here
-        try{
+        try {
             Files.write(path, list);
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,14 +162,14 @@ public class Main {
     }
 
     //method is supposed to increase file suffix by 1 letter : currently not working
-    private static Path createPath(String homeFolder,String folder, String fileName) {
+    private static Path createPath(String homeFolder, String folder, String fileName) {
         Path path = Path.of(homeFolder, folder, fileName);
 
 
         //testa använda datum+klockslagen för automatiskt sparning (nytt filnamn) men användaren väljer att spara kan
         // man skriva över den gamla
 
-        if(Files.exists(path)) {
+        if (Files.exists(path)) {
             String currentName = String.valueOf(path.getFileName());
 
             int index = currentName.indexOf("-");
@@ -165,33 +191,33 @@ public class Main {
 
 
 /*
-* a method in Main that is called to create new products
-*   print out list of possible categories
-*   categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
-*
-*   choose category by number
-*   get chosen category and insert into new product
-*   categories.get(5);
-*
-*   store categories in a Hashmap instead?
-*   -> choose an int as input value (that represents product key in Hashmap) to choose a category
-*   add / save new product to file?
-*
-*    //save files to csv
-*
+ * a method in Main that is called to create new products
+ *   print out list of possible categories
+ *   categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
+ *
+ *   choose category by number
+ *   get chosen category and insert into new product
+ *   categories.get(5);
+ *
+ *   store categories in a Hashmap instead?
+ *   -> choose an int as input value (that represents product key in Hashmap) to choose a category
+ *   add / save new product to file?
+ *
+ *    //save files to csv
+ *
 
  */
 
 /*
-*   Creating new products
-*   check user input for correct values & give feedback / don't attempt to create new items & crash your program
-*       - int(price), long(barcode), valid category
-*
-*   product details -> create new item in Products (list of available products)
-*   product.barcode & quantity -> added to Stock
+ *   Creating new products
+ *   check user input for correct values & give feedback / don't attempt to create new items & crash your program
+ *       - int(price), long(barcode), valid category
+ *
+ *   product details -> create new item in Products (list of available products)
+ *   product.barcode & quantity -> added to Stock
  */
 
 /*
-*   check that quantity > 0 && quantity-purchase > 0
-*   check that "new" product barcode is not present in stock   &   product Item is not present in Products (list)
+ *   check that quantity > 0 && quantity-purchase > 0
+ *   check that "new" product barcode is not present in stock   &   product Item is not present in Products (list)
  */

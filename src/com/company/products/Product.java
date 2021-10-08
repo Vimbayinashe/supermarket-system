@@ -99,10 +99,6 @@ public class Product {
                 '}';
     }
 
-    public String toDisplayString() {
-        return  brand + " " + name + " - " + price.toPlainString().replace('.', ',') + " kr";
-    }
-
 
     public static void main(String[] args) {
         Category cheese = new Category("cheese");

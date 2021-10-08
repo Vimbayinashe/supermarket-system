@@ -5,26 +5,24 @@ import java.util.List;
 
 public class Products {
 
-    private List<Product> stock = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 
-    //todo: getProduct by index or barcode instead? => if so, how to get index when given barcode
+    //todo: can only getIndexOf(Product product) => index => getProduct(index). Also unnecessary to search for pdt here
 
-
-    public Product getProductByBarcode(int index) {
-        return stock.get(index);
+    public Long productBarcode(int index) {
+        return products.get(index).barcode();
     }
 
-    public Product getProductByIndex(int index) {
-        return stock.get(index);
+    public Product getProduct(int index) {
+        return products.get(index);
     }
-
-    public void printProductsAsNumberedList() {
-        stock.forEach(category -> System.out.println((stock.indexOf(category) + 1) + " " + category.toDisplayString()));
-    }
-
 
     public void addProduct(Product product) {
-        stock.add(product);
+        products.add(product);
+    }
+
+    public List<Product> listOfProducts() {
+        return List.copyOf(products);
     }
 
 
