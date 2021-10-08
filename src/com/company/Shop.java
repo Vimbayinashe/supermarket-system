@@ -31,22 +31,11 @@ public class Shop {
         DefaultData defaultData = new DefaultData();
 
 
-        //try to read from file
-        // check for all 2 separate files -> add arg that shows what of categories, products & stock needs defaults?
-        //categories = functionToPerformBelow("categories")
-
-        //todo: move default Categories to DefaultProducts & rename to DefaultData
-
-
-        if(Files.exists(getPath("Default Categories")))
-        {
+        if(Files.exists(getPath("Default Categories"))) {
             List<String> categoriesData = readFileWithOneColumn("Default Categories");
             categories = generateCategories(categoriesData);
-            //print categories
-            categoriesData.forEach(System.out::println);
         } else
             categories = generateCategories(defaultData.categories());
-
 
         if(Files.exists(getPath("Default Product Details and Inventory"))) {
             List<String[]> data = readFile("Default Product Details and Inventory");
@@ -63,10 +52,8 @@ public class Shop {
         else {
             stock = generateStock(defaultData.products(), categories);
         }
-            //if files present -> update categories (!first), stock and products (Read from file)
 
-             //else fill in details from initial default values
-
+        //useful printouts
         //printProductsCustomerView(products.listOfProducts());
 
         //Search for product in Stock using barcode
@@ -74,8 +61,8 @@ public class Shop {
 //        System.out.println(products.productBarcode(1));
 
 
-        /* filtering, searching for price intervals, categories, product name/part of pdt name, brand
-           sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
+        /* implementation of methods for: filtering, searching for price intervals, categories, product name/part of
+        pdt name, brand sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
         //remember -> return an Optional, handle successful result & no result (Optional.empty)
 
 
