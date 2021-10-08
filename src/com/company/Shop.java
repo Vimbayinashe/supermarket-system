@@ -30,27 +30,22 @@ public class Shop {
         Stock stock = new Stock();
         DefaultData defaultData = new DefaultData();
 
-
-        if(Files.exists(getPath("Default Categories"))) {
-            List<String> categoriesData = readFileWithOneColumn("Default Categories");
-            categories = generateCategories(categoriesData);
-        } else
-            categories = generateCategories(defaultData.categories());
+        categories = getCategories(defaultData.categories());
 
         if(Files.exists(getPath("Default Product Details and Inventory"))) {
             List<String[]> data = readFile("Default Product Details and Inventory");
-            products = generateProducts(data, categories);
+            products = dataToProducts(data, categories);
         }
         else {
-            products = generateProducts(defaultData.products(), categories);
+            products = dataToProducts(defaultData.products(), categories);
         }
 
         if(Files.exists(getPath("Default Product Details and Inventory"))) {
             List<String[]> data = readFile("Default Product Details and Inventory");
-            stock = generateStock(data, categories);
+            stock = dataToStock(data, categories);
         }
         else {
-            stock = generateStock(defaultData.products(), categories);
+            stock = dataToStock(defaultData.products(), categories);
         }
 
         //useful printouts
@@ -104,6 +99,14 @@ public class Shop {
         saveFile(combined, "products and quantities");
     }
 
+    private Categories getCategories(List<String> defaultData) {
+        if(Files.exists(getPath("Default Categories"))) {
+            List<String> categoriesData = readFileWithOneColumn("Default Categories");
+            return dataToCategories(categoriesData);
+        } else
+            return dataToCategories(defaultData);
+    }
+
     private List<String> readFileWithOneColumn(String name) {
         if(readFile(name).isEmpty())
             return List.of();
@@ -154,13 +157,13 @@ public class Shop {
                 + product.price().replace('.', ',') + " kr");
     }
 
-    private Categories generateCategories(List<String> list) {
+    private Categories dataToCategories(List<String> list) {
         Categories categories = new Categories();
         list.forEach(categories::addCategory);
         return categories;
     }
 
-    private Stock generateStock(List<String[]> products, Categories categories) {
+    private Stock dataToStock(List<String[]> products, Categories categories) {
         Stock stock = new Stock();
 
         products.stream()
@@ -184,7 +187,7 @@ public class Shop {
         }
     }
 
-    private Products generateProducts(List<String[]> inputProducts, Categories categories) {
+    private Products dataToProducts(List<String[]> inputProducts, Categories categories) {
         Products products = new Products();
 
         inputProducts.stream()
@@ -233,4 +236,10 @@ public class Shop {
 /*
  *   check that quantity > 0 && quantity-purchase > 0
  *   check that "new" product barcode is not present in stock   &   product Item is not present in Products (list)
+ */
+
+
+/*
+ * adding new category -> english only, check current list first <= request user
+ * read Martin's message on Teams also
  */
