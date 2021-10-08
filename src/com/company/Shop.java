@@ -29,19 +29,19 @@ public class Shop {
 
         //try to read from file
         // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
-            //if files present -> update categories (!first), stock and products (Read from file)
+        //if files present -> update categories (!first), stock and products (Read from file)
 
-            //else fill in details from initial default values
-            categories = defaultCategories();
-            try {       //does this interrupt the result of both methods if one of them has a problem
-                products = defaultProducts(defaultProducts.products(), categories);
-                stock = generateStock(defaultProducts.products(), categories);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        //else fill in details from initial default values
+        categories = defaultCategories();
+        try {       //does this interrupt the result of both methods if one of them has a problem
+            products = generateProducts(defaultProducts.products(), categories);
+            stock = generateStock(defaultProducts.products(), categories);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-        //printProductsCustomerView(products.listOfProducts());
+        printProductsCustomerView(products.listOfProducts());
 
         //Search for product in Stock using barcode
         System.out.println(products.getProduct(1).barcode());
@@ -142,16 +142,15 @@ public class Shop {
         return categories;
     }
 
-    private  Stock generateStock(List<String[]> products, Categories categories) {
+    private Stock generateStock(List<String[]> products, Categories categories) {
         Stock stock = new Stock();
 
-         products.stream()
+        products.stream()
                 .filter(product -> categories.contains(product[3]))
                 .filter(product -> validLong(product[0]))
                 .map(this::productToStockItem)
                 .forEach(stock::addProduct);
-
-         return stock;
+        return stock;
     }
 
     private StockItem productToStockItem(String[] product) {
@@ -167,24 +166,21 @@ public class Shop {
         }
     }
 
-    public static Products defaultProducts(List<String[]> defaultProducts, Categories categories) {
+
+    public Products generateProducts(List<String[]> inputProducts, Categories categories) {
         Products products = new Products();
 
-        //todo: refactor to a stream change to a stream?
-        defaultProducts.forEach(product -> {
-            if (categories.doesNotContain(product[3]))
-                throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
-
-            try {
-                products.addProduct(
-                        new Product(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]),
-                                product[4])
-                );
-            } catch (NumberFormatException e) {
-                throw new NumberFormatException("Invalid barcode: " + product[0]);
-            }
-        });
+        inputProducts.stream()
+                .filter(product -> categories.contains(product[3]))
+                .filter(product -> validLong(product[0]))
+                .map(this::productToProductVariable)
+                .forEach(products::addProduct);
         return products;
+    }
+
+    private Product productToProductVariable(String[] product) {
+        return new Product(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]),
+                product[4]);
     }
 
 
