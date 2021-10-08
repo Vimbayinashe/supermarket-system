@@ -6,11 +6,11 @@ import com.company.products.DefaultProducts;
 import com.company.products.Product;
 import com.company.products.Products;
 import com.company.stock.Stock;
+import com.company.stock.StockItem;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class Shop {
@@ -35,12 +35,12 @@ public class Shop {
             categories = defaultCategories();
             try {       //does this interrupt the result of both methods if one of them has a problem
                 products = defaultProducts(defaultProducts.products(), categories);
-                stock = defaultStock(defaultProducts.products(), categories);
+                stock = generateStock(defaultProducts.products(), categories);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        //printing product list
+
         //printProductsCustomerView(products.listOfProducts());
 
         //Search for product in Stock using barcode
@@ -48,34 +48,35 @@ public class Shop {
         System.out.println(products.productBarcode(1));
 
 
-        //todo: filtering, searching for price intervals, categories, product name/part of pdt name, brand
-        // sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)
+        /* todo: filtering, searching for price intervals, categories, product name/part of pdt name, brand
+            sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
         //remember -> return an Optional, handle successful result & no result (Optional.empty)
 
-        //filtering price intervals
-        /*List<Product> priceFiltered = products.priceRange("0", "10.5");
-        printProductsCustomerView(priceFiltered);
-        Long productBarcode = priceFiltered.get(2).barcode();
-        System.out.println(productBarcode);
-        */
 
-        //filtering for a category
-        //user must choose a number from a list of categories => position
-        /* int position = 7;
-        Category selectedCategory = categories.getCategory(position);
-        List<Product> categoryFiltered = products.filterByCategory(selectedCategory);
-        printProductsCustomerView(categoryFiltered);
-         */
-
-        //filter by brand name
-        /*List<Product> brandFiltered = products.filterByBrand("ica");
-        printProductsCustomerView(brandFiltered);
-         */
-
-        //filter by product name / part of name
-        /*List<Product> nameFiltered = products.filterByName("apple");
-        printProductsCustomerView(nameFiltered);
-             */
+//        //filtering price intervals
+//        List<Product> priceFiltered = products.priceRange("0", "10.5");
+//        printProductsCustomerView(priceFiltered);
+//        Long productBarcode = priceFiltered.get(2).barcode();
+//        System.out.println(productBarcode);
+//
+//
+//        //filtering for a category
+//        //user must choose a number from a list of categories => position
+//        int position = 7;
+//        Category selectedCategory = categories.getCategory(position);
+//        List<Product> categoryFiltered = products.filterByCategory(selectedCategory);
+//        printProductsCustomerView(categoryFiltered);
+//
+//
+//        //filter by brand name
+//        List<Product> brandFiltered = products.filterByBrand("ica");
+//        printProductsCustomerView(brandFiltered);
+//
+//
+//        //filter by product name / part of name
+//        List<Product> nameFiltered = products.filterByName("apple");
+//        printProductsCustomerView(nameFiltered);
+//
 
         //sort by price
 //        List<Product> sortedByPrice = products.sortByPriceAscending();
@@ -83,21 +84,11 @@ public class Shop {
 //        List<Product> sortedByPrice = products.sortByBrandDescending();
 //        printProductsCustomerView(sortedByPrice);
 
-
-        /*
-         *   create a new List<String []> populated by a stream
-         *       products.stream.map(item -> new String[](a, b , c, d.toString, e. stock.get(a) )).toList
-         *       Save to csv file.
-         *
-         *   test: saving csv file from a List<String []>
-         */
-
+        //Saving categories and a list of products & quantities to file
         saveFile(categories.listOfStrings(), "categories");
-        
 
         List<String> combined = listOfProductsAndStock(products, stock);
-        combined.forEach(System.out::println);
-        saveFile(combined, "stock");
+        saveFile(combined, "products & quantities");
     }
 
     private List<String> listOfProductsAndStock(Products products, Stock stock) {
@@ -129,7 +120,7 @@ public class Shop {
                 + product.price().replace('.', ',') + " kr");
     }
 
-    private static Categories defaultCategories() {
+    private Categories defaultCategories() {
         Categories categories = new Categories();
 
         categories.addCategory("bakery");
@@ -151,29 +142,35 @@ public class Shop {
         return categories;
     }
 
-    private static Stock defaultStock(List<String[]> products, Categories categories) {
+    private  Stock generateStock(List<String[]> products, Categories categories) {
         Stock stock = new Stock();
 
-        products.forEach(product -> {
+         products.stream()
+                .filter(product -> categories.contains(product[3]))
+                .filter(product -> validLong(product[0]))
+                .map(this::productToStockItem)
+                .forEach(stock::addProduct);
 
-            if (categories.doesNotContain(product[3]))
-                throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
-            //returna Optional -> som innehåller en kategorie eller empty
+         return stock;
+    }
 
-            try {
-                stock.addProduct(Long.parseLong(product[0]), Integer.parseInt(product[5]));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                //throw new NumberFormatException("Invalid barcode or quantity on product " + product[0]);
-            }
-        });
-        return stock;
+    private StockItem productToStockItem(String[] product) {
+        return new StockItem(Long.parseLong(product[0]), Integer.parseInt(product[5]));
+    }
+
+    public boolean validLong(String value) {
+        try {
+            Long.parseLong(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public static Products defaultProducts(List<String[]> defaultProducts, Categories categories) {
         Products products = new Products();
 
-        //change to a stream?
+        //todo: refactor to a stream change to a stream?
         defaultProducts.forEach(product -> {
             if (categories.doesNotContain(product[3]))
                 throw new IllegalArgumentException("Invalid product category. Barcode: " + product[0]);
@@ -216,7 +213,7 @@ public class Shop {
 
 }
 
-
+//todo: do methods in Shop class need to be static? NO  => check & remove static keyword
 
 
 

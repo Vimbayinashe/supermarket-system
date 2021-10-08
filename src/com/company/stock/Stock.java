@@ -4,6 +4,7 @@ import com.company.products.Guard;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class Stock {
@@ -19,6 +20,14 @@ public class Stock {
         if (quantity < 1)
             throw new IllegalArgumentException("Product's quantity is less than 1");
         stockList.put(barcode, quantity);
+    }
+
+    public void addProduct(StockItem item) {
+        if (stockList.containsKey(item.barcode()))
+            throw new IllegalArgumentException("Product already exists in stock");
+        if (item.quantity() < 1)
+            throw new IllegalArgumentException("Product's quantity is less than 1");
+        stockList.put(item.barcode(), item.quantity());
     }
 
     public int getQuantity(Long barcode) {
@@ -43,6 +52,25 @@ public class Stock {
         return stockList.entrySet();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Stock stock = (Stock) o;
+        return Objects.equals(stockList, stock.stockList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stockList);
+    }
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "stockList=" + stockList +
+                '}';
+    }
 
     public static void main(String[] args) {
         Stock stock = new Stock();

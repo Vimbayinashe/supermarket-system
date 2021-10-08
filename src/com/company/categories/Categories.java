@@ -57,6 +57,10 @@ public class Categories {
         return !categories.contains(new Category(query));
     }
 
+    public boolean contains(String query) {
+        return categories.contains(new Category(query));
+    }
+
     public void printCategoriesAsNumberedList() {
         categories.forEach(category -> System.out.println((categories.indexOf(category) + 1) + " " + category.name()));
     }
