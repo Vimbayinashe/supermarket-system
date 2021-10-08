@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DefaultData {
     private final List<String> categories;
-    private final List<String[]> products;
+    private final List<String[]> inventory;
 
     public DefaultData() {
 
@@ -26,7 +26,7 @@ public class DefaultData {
                 "beauty"
         );
 
-        products = List.of(
+        inventory = List.of(
                 new String[]{"7810255825944", "Apple", "ICA Basic", "fruit and vegetables", "2", "200"},
                 new String[]{"7318693555824", "Red Grapes", "ICA", "fruit and vegetables", "20", "120"},
                 new String[]{"5588944871150", "Honeycrunch apple", "ICA Premium", "fruit and vegetables", "3.5", "30"},
@@ -49,8 +49,8 @@ public class DefaultData {
         );
     }
 
-    public List<String[]> products() {
-        return products;
+    public List<String[]> inventoryList() {
+        return inventory;
     }
 
     public List<String> categories() {

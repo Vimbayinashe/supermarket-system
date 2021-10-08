@@ -31,19 +31,10 @@ public class Shop {
         DefaultData defaultData = new DefaultData();
 
         categories = getCategories(defaultData.categories());
+        products = getProducts(categories, defaultData.inventoryList());
+        stock = getStock(categories, defaultData.inventoryList());
 
-        products = getProducts(defaultData.products(), categories);
-
-        if(Files.exists(getPath("Default Product Details and Inventory"))) {
-            List<String[]> data = readFile("Default Product Details and Inventory");
-            stock = dataToStock(data, categories);
-        }
-        else {
-            stock = dataToStock(defaultData.products(), categories);
-        }
-
-        //useful printouts
-        //printProductsCustomerView(products.listOfProducts());
+        printProductsCustomerView(products.listOfProducts());
 
         //Search for product in Stock using barcode
 //        System.out.println(products.getProduct(1).barcode());
@@ -86,20 +77,30 @@ public class Shop {
 //        List<Product> sortedByPrice = products.sortByBrandDescending();
 //        printProductsCustomerView(sortedByPrice);
 
-        //todo? : add date-timestamp combo to file name (if time permits)
+        //todo? : add date-timestamp combo to file name (if time permits),
+        // let user enter desire filename? writing over current file is easiest
         saveFile(categories.listOfStrings(), "categories");
 
         List<String> combined = listOfProductsAndStock(products, stock);
         saveFile(combined, "products and quantities");
     }
 
-    private Products getProducts(List<String[]> defaultProducts, Categories categories) {
+    private Stock getStock(Categories categories, List<String[]> defaultInventory) {
+        if(Files.exists(getPath("Default Product Details and Inventory"))) {
+            List<String[]> data = readFile("Default Product Details and Inventory");
+            return dataToStock(data, categories);
+        }
+        else
+            return dataToStock(defaultInventory, categories);
+    }
+
+    private Products getProducts(Categories categories, List<String[]> defaultInventory) {
         if(Files.exists(getPath("Default Product Details and Inventory"))) {
             List<String[]> data = readFile("Default Product Details and Inventory");
             return dataToProducts(data, categories);
         }
-        else 
-            return dataToProducts(defaultProducts, categories);
+        else
+            return dataToProducts(defaultInventory, categories);
     }
 
     private Categories getCategories(List<String> defaultData) {
