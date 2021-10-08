@@ -61,8 +61,10 @@ public class Main {
          */
 
         //filter by brand name
-        List<Product> brandFiltered = products.filterByBrand("Pop");
+        /*List<Product> brandFiltered = products.filterByBrand("ica");
         printProductsCustomerView(brandFiltered);
+        
+         */
 
 
         /*
@@ -89,7 +91,10 @@ public class Main {
 //    }
 
     public static void printProductsCustomerView(List<Product> products) {
-        products.forEach(product -> printProduct(products.indexOf(product) + 1, product));
+        if (products.isEmpty())
+            System.out.println("No products found.");
+        else
+            products.forEach(product -> printProduct(products.indexOf(product) + 1, product));
     }
 
     public static void printProduct(int index, Product product) {
