@@ -12,9 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class Main {
+public class Shop {
 
     public static void main(String[] args) {
+        Shop shop = new Shop();
+        shop.run();
+    }
+
+    private  void run() {
         Categories categories = new Categories();
         Products products = new Products();
         Stock stock = new Stock();
@@ -23,16 +28,16 @@ public class Main {
 
         //try to read from file
         // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
-        //if files present -> update categories (!first), stock and products
+            //if files present -> update categories (!first), stock and products
 
-        //else fill in details from initial default values
-        categories = defaultCategories();
-        try {       //does this interrupt the result of both methods if one of them has a problem
-            products = defaultProducts(defaultProducts.products(), categories);
-            stock = defaultStock(defaultProducts.products(), categories);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            //else fill in details from initial default values
+            categories = defaultCategories();
+            try {       //does this interrupt the result of both methods if one of them has a problem
+                products = defaultProducts(defaultProducts.products(), categories);
+                stock = defaultStock(defaultProducts.products(), categories);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         //printing product list
         //printProductsCustomerView(products.listOfProducts());
@@ -40,6 +45,7 @@ public class Main {
         //Search for product in Stock using barcode
         System.out.println(products.getProduct(1).barcode());
         System.out.println(products.productBarcode(1));
+
 
         //todo: filtering, searching for price intervals, categories, product name/part of pdt name, brand
         // sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)
@@ -92,13 +98,8 @@ public class Main {
                    .map(Object::toString)
                    .collect(Collectors.joining(", "));
          */
-
     }
 
-//    private static List<Product> productsFilteredByCategory(Products products, Categories categories, int position) {
-//        Category
-//
-//    }
 
     public static void printProductsCustomerView(List<Product> products) {
         if (products.isEmpty())
