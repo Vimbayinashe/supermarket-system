@@ -41,7 +41,7 @@ public class Categories {
         return List.copyOf(categories);
     }
 
-    public List<String> categoriesAsListOfStrings() {
+    public List<String> listOfStrings() {
         return categories.stream()
                 .map(Category::name)
                 .collect(Collectors.toList());

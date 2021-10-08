@@ -10,6 +10,7 @@ import com.company.stock.Stock;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class Shop {
@@ -19,7 +20,7 @@ public class Shop {
         shop.run();
     }
 
-    private  void run() {
+    private void run() {
         Categories categories = new Categories();
         Products products = new Products();
         Stock stock = new Stock();
@@ -28,7 +29,7 @@ public class Shop {
 
         //try to read from file
         // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
-            //if files present -> update categories (!first), stock and products
+            //if files present -> update categories (!first), stock and products (Read from file)
 
             //else fill in details from initial default values
             categories = defaultCategories();
@@ -91,7 +92,8 @@ public class Shop {
          *   test: saving csv file from a List<String []>
          */
 
-        saveFile(categories.categoriesAsListOfStrings());
+        saveFile(categories.listOfStrings(), "categories");
+        saveFile(List.of("seven,seven,seven", "two,two", "three,four,four"), "numbers");
         //saveFile(List.of("five,six,seven", "eight,nine,zero", "ten,twelve,eleven")); //saving 3 rows x 3 columns
         /*       // Convert elements to strings and concatenate them, separated by commas
                  String joined = things.stream()
@@ -100,6 +102,17 @@ public class Shop {
          */
     }
 
+
+    public void saveFile(List<String> list, String name) {
+        String fileName = name.concat(".csv");
+        Path path = Path.of("resources", fileName);
+        
+        try {
+            Files.write(path, list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void printProductsCustomerView(List<Product> products) {
         if (products.isEmpty())
@@ -174,28 +187,6 @@ public class Shop {
         return products;
     }
 
-
-    public static void saveFile(List<String> list) {
-        String homeFolder = System.getProperty("user.home");
-        Path path = Path.of(homeFolder, "store", "categories-1.csv");
-
-        //trying to make new file
-        //Path path = createPath(homeFolder, "store", "categories-1.csv");
-
-
-        try {
-            Files.createDirectories(path.getParent());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //try (Stream<String> file = list.stream() ){       //there must be sth streamable here
-        try {
-            Files.write(path, list);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     //method is supposed to increase file suffix by 1 letter : currently not working
     private static Path createPath(String homeFolder, String folder, String fileName) {
