@@ -27,7 +27,7 @@ public class Products {
         return List.copyOf(products);
     }
 
-    public List<Product> priceRange(String start, String  end) {
+    public List<Product> filterByPriceRange(String start, String  end) {
         Guard.Against.InvalidPriceFormat(start);
         Guard.Against.InvalidPriceFormat(end);
         return products.stream()
@@ -43,14 +43,22 @@ public class Products {
         return products.stream().filter(product -> product.category().equals(category)).toList();
     }
 
+    //Note: using startsWith includes results for example ICA, ICA Basic & ICA Premium in a search for ICA
+    //.filter(product -> product.brand().toLowerCase().startsWith(brand.toLowerCase()))
+
     public List<Product> filterByBrand(String brand) {
         return products.stream()
                 .filter(product -> product.brand().equalsIgnoreCase(brand))
                 .toList();
     }
-    
-    //Note: using startsWith to include for example ICA, ICA Basic & ICA Premium results in a search for ICA
-    //.filter(product -> product.brand().toLowerCase().startsWith(brand.toLowerCase()))
+
+    public List<Product> filterByName(String name) {
+        return products.stream()
+                .filter(product -> product.name().toLowerCase().contains(name.toLowerCase()))
+                .toList();
+    }
+
+
 
 
     // save changes to file
