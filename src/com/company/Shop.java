@@ -48,8 +48,8 @@ public class Shop {
         System.out.println(products.productBarcode(1));
 
 
-        /* todo: filtering, searching for price intervals, categories, product name/part of pdt name, brand
-            sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
+        /* filtering, searching for price intervals, categories, product name/part of pdt name, brand
+           sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
         //remember -> return an Optional, handle successful result & no result (Optional.empty)
 
 
@@ -97,7 +97,7 @@ public class Shop {
                 .toList();
     }
 
-    public void saveFile(List<String> list, String name) {
+    private void saveFile(List<String> list, String name) {
         String fileName = name.concat(".csv");
         Path path = Path.of("resources", fileName);
 
@@ -108,14 +108,14 @@ public class Shop {
         }
     }
 
-    public static void printProductsCustomerView(List<Product> products) {
+    private void printProductsCustomerView(List<Product> products) {
         if (products.isEmpty())
             System.out.println("No products found.");
         else
             products.forEach(product -> printProduct(products.indexOf(product) + 1, product));
     }
 
-    public static void printProduct(int index, Product product) {
+    private void printProduct(int index, Product product) {
         System.out.println(index + " " + product.brand() + " " + product.name() + " - "
                 + product.price().replace('.', ',') + " kr");
     }
@@ -157,7 +157,7 @@ public class Shop {
         return new StockItem(Long.parseLong(product[0]), Integer.parseInt(product[5]));
     }
 
-    public boolean validLong(String value) {
+    private boolean validLong(String value) {
         try {
             Long.parseLong(value);
             return true;
@@ -165,9 +165,8 @@ public class Shop {
             return false;
         }
     }
-
-
-    public Products generateProducts(List<String[]> inputProducts, Categories categories) {
+    
+    private Products generateProducts(List<String[]> inputProducts, Categories categories) {
         Products products = new Products();
 
         inputProducts.stream()
@@ -183,34 +182,7 @@ public class Shop {
                 product[4]);
     }
 
-
-    //method is supposed to increase file suffix by 1 letter : currently not working
-    private static Path createPath(String homeFolder, String folder, String fileName) {
-        Path path = Path.of(homeFolder, folder, fileName);
-
-
-        //testa använda datum+klockslagen för automatiskt sparning (nytt filnamn) men användaren väljer att spara kan
-        // man skriva över den gamla
-
-        if (Files.exists(path)) {
-            String currentName = String.valueOf(path.getFileName());
-
-            int index = currentName.indexOf("-");
-            int version = Integer.parseInt(String.valueOf(currentName.charAt(index + 1)));
-
-            String newName = "categories-" + (version + 1) + ".csv";
-
-            System.out.println(version);
-
-            return Path.of(homeFolder, folder, newName);
-        }
-        return path;
-    }
-
 }
-
-//todo: do methods in Shop class need to be static? NO  => check & remove static keyword
-
 
 
 /*
