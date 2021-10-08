@@ -32,13 +32,7 @@ public class Shop {
 
         categories = getCategories(defaultData.categories());
 
-        if(Files.exists(getPath("Default Product Details and Inventory"))) {
-            List<String[]> data = readFile("Default Product Details and Inventory");
-            products = dataToProducts(data, categories);
-        }
-        else {
-            products = dataToProducts(defaultData.products(), categories);
-        }
+        products = getProducts(defaultData.products(), categories);
 
         if(Files.exists(getPath("Default Product Details and Inventory"))) {
             List<String[]> data = readFile("Default Product Details and Inventory");
@@ -97,6 +91,15 @@ public class Shop {
 
         List<String> combined = listOfProductsAndStock(products, stock);
         saveFile(combined, "products and quantities");
+    }
+
+    private Products getProducts(List<String[]> defaultProducts, Categories categories) {
+        if(Files.exists(getPath("Default Product Details and Inventory"))) {
+            List<String[]> data = readFile("Default Product Details and Inventory");
+            return dataToProducts(data, categories);
+        }
+        else 
+            return dataToProducts(defaultProducts, categories);
     }
 
     private Categories getCategories(List<String> defaultData) {
