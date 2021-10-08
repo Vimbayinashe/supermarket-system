@@ -44,11 +44,11 @@ public class Products {
     }
 
     //Note: using startsWith includes results for example ICA, ICA Basic & ICA Premium in a search for ICA
-    //.filter(product -> product.brand().toLowerCase().startsWith(brand.toLowerCase()))
+    // else use -> product.brand().equalsIgnoreCase(brand)
 
     public List<Product> filterByBrand(String brand) {
         return products.stream()
-                .filter(product -> product.brand().equalsIgnoreCase(brand))
+                .filter(product -> product.brand().toLowerCase().startsWith(brand.toLowerCase()))
                 .toList();
     }
 

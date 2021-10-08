@@ -61,14 +61,15 @@ public class Main {
          */
 
         //filter by brand name
-        /*List<Product> brandFiltered = products.filterByBrand("ica");
+        List<Product> brandFiltered = products.filterByBrand("ica");
         printProductsCustomerView(brandFiltered);
 
-         */
+
 
         //filter by product name / part of name
-        List<Product> nameFiltered = products.filterByName("apple");
+        /*List<Product> nameFiltered = products.filterByName("apple");
         printProductsCustomerView(nameFiltered);
+             */
 
 
         /*
