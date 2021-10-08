@@ -38,19 +38,29 @@ public class Shop {
         //todo: move default Categories to DefaultProducts & rename to DefaultData
 
 
-        if(Files.exists(getPath("categories")))
+        if(Files.exists(getPath("Default Categories")))
         {
-            List<String> categoriesData = readCategoriesFile("categories");
+            List<String> categoriesData = readFileWithOneColumn("Default Categories");
             categories = generateCategories(categoriesData);
             //print categories
             categoriesData.forEach(System.out::println);
         } else
             categories = generateCategories(defaultData.categories());
 
-        if(Files.exists(getPath("products and quantities")))
-            readFile("products and quantities");
+
+        if(Files.exists(getPath("Default Product Details and Inventory"))) {
+            List<String[]> data = readFile("Default Product Details and Inventory");
+            products = generateProducts(data, categories);
+        }
         else {
             products = generateProducts(defaultData.products(), categories);
+        }
+
+        if(Files.exists(getPath("Default Product Details and Inventory"))) {
+            List<String[]> data = readFile("Default Product Details and Inventory");
+            stock = generateStock(data, categories);
+        }
+        else {
             stock = generateStock(defaultData.products(), categories);
         }
             //if files present -> update categories (!first), stock and products (Read from file)
@@ -100,22 +110,17 @@ public class Shop {
 //        List<Product> sortedByPrice = products.sortByBrandDescending();
 //        printProductsCustomerView(sortedByPrice);
 
-        //Saving categories and a list of products & quantities to file
+        //todo? : add date-timestamp combo to file name (if time permits)
         saveFile(categories.listOfStrings(), "categories");
 
         List<String> combined = listOfProductsAndStock(products, stock);
         saveFile(combined, "products and quantities");
     }
 
-    private List<String> readCategoriesFile(String name) {
-        Path path = getPath(name);
-
-        try(Stream<String> contents = Files.lines(path)) {
-            return contents.toList();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private List<String> readFileWithOneColumn(String name) {
+        if(readFile(name).isEmpty())
             return List.of();
-        }
+        return readFile(name).stream().map(item -> item[0]).toList();
     }
 
     private List<String[]> readFile(String name) {
