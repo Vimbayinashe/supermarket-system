@@ -3,6 +3,7 @@ package com.company.products;
 import com.company.categories.Category;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Products {
@@ -58,7 +59,17 @@ public class Products {
                 .toList();
     }
 
+    public List<Product> sortByPriceAscending() {
+        return products.stream()
+                .sorted(Comparator.comparingDouble(Product::priceAsDouble))
+                .toList();
+    }
 
+    public List<Product> sortByPriceDescending() {
+        return products.stream()
+                .sorted(Comparator.comparingDouble(Product::priceAsDouble).reversed())
+                .toList();
+    }
 
 
     // save changes to file
