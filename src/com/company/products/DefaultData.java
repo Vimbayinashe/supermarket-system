@@ -2,10 +2,29 @@ package com.company.products;
 
 import java.util.List;
 
-public class DefaultProducts {
-    List<String[]> products;
+public class DefaultData {
+    private final List<String> categories;
+    private final List<String[]> products;
 
-    public DefaultProducts() {
+    public DefaultData() {
+
+        categories = List.of(
+                "bakery",
+                "dairy products",
+                "meat and poultry",
+                "frozen foods",
+                "ready meals",
+                "food cupboard",
+                "fruit and vegetables",
+                "drinks",
+                "sweets and ice-cream",
+                "garden",
+                "toys",
+                "household",
+                "toiletries",
+                "health",
+                "beauty"
+        );
 
         products = List.of(
                 new String[]{"7810255825944", "Apple", "ICA Basic", "fruit and vegetables", "2", "200"},
@@ -32,5 +51,9 @@ public class DefaultProducts {
 
     public List<String[]> products() {
         return products;
+    }
+
+    public List<String> categories() {
+        return categories;
     }
 }

@@ -2,7 +2,7 @@ package com.company;
 
 import com.company.categories.Categories;
 import com.company.categories.Category;
-import com.company.products.DefaultProducts;
+import com.company.products.DefaultData;
 import com.company.products.Product;
 import com.company.products.Products;
 import com.company.stock.Stock;
@@ -12,8 +12,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class Shop {
+
+    private static final Pattern pattern = Pattern.compile(",");
 
     public static void main(String[] args) {
         Shop shop = new Shop();
@@ -24,28 +28,40 @@ public class Shop {
         Categories categories = new Categories();
         Products products = new Products();
         Stock stock = new Stock();
-        DefaultProducts defaultProducts = new DefaultProducts();
+        DefaultData defaultData = new DefaultData();
 
 
         //try to read from file
-        // check for all 3 separate files -> add arg that shows what of categories, products & stock needsdefaults?
-        //if files present -> update categories (!first), stock and products (Read from file)
+        // check for all 2 separate files -> add arg that shows what of categories, products & stock needs defaults?
+        //categories = functionToPerformBelow("categories")
 
-        //else fill in details from initial default values
-        categories = defaultCategories();
-        try {       //does this interrupt the result of both methods if one of them has a problem
-            products = generateProducts(defaultProducts.products(), categories);
-            stock = generateStock(defaultProducts.products(), categories);
-        } catch (Exception e) {
-            e.printStackTrace();
+        //todo: move default Categories to DefaultProducts & rename to DefaultData
+
+
+        if(Files.exists(getPath("categories")))
+        {
+            List<String> categoriesData = readCategoriesFile("categories");
+            categories = generateCategories(categoriesData);
+            //print categories
+            categoriesData.forEach(System.out::println);
+        } else
+            categories = generateCategories(defaultData.categories());
+
+        if(Files.exists(getPath("products and quantities")))
+            readFile("products and quantities");
+        else {
+            products = generateProducts(defaultData.products(), categories);
+            stock = generateStock(defaultData.products(), categories);
         }
+            //if files present -> update categories (!first), stock and products (Read from file)
 
+             //else fill in details from initial default values
 
-        printProductsCustomerView(products.listOfProducts());
+        //printProductsCustomerView(products.listOfProducts());
 
         //Search for product in Stock using barcode
-        System.out.println(products.getProduct(1).barcode());
-        System.out.println(products.productBarcode(1));
+//        System.out.println(products.getProduct(1).barcode());
+//        System.out.println(products.productBarcode(1));
 
 
         /* filtering, searching for price intervals, categories, product name/part of pdt name, brand
@@ -88,24 +104,50 @@ public class Shop {
         saveFile(categories.listOfStrings(), "categories");
 
         List<String> combined = listOfProductsAndStock(products, stock);
-        saveFile(combined, "products & quantities");
+        saveFile(combined, "products and quantities");
     }
 
-    private List<String> listOfProductsAndStock(Products products, Stock stock) {
-        return products.streamOfProducts()
-                .map(product -> product.toCommaSeparatedString() + "," + stock.getQuantity(product.barcode()))
-                .toList();
+    private List<String> readCategoriesFile(String name) {
+        Path path = getPath(name);
+
+        try(Stream<String> contents = Files.lines(path)) {
+            return contents.toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    private List<String[]> readFile(String name) {
+        Path path = getPath(name);
+
+        try(Stream<String> contents = Files.lines(path)) {
+            return contents.map(pattern::split).toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     private void saveFile(List<String> list, String name) {
-        String fileName = name.concat(".csv");
-        Path path = Path.of("resources", fileName);
+        Path path = getPath(name);
 
         try {
             Files.write(path, list);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Path getPath(String name) {
+        String fileName = name.concat(".csv");
+        return Path.of("resources", fileName);
+    }
+
+    private List<String> listOfProductsAndStock(Products products, Stock stock) {
+        return products.streamOfProducts()
+                .map(product -> product.toCommaSeparatedString() + "," + stock.getQuantity(product.barcode()))
+                .toList();
     }
 
     private void printProductsCustomerView(List<Product> products) {
@@ -120,25 +162,9 @@ public class Shop {
                 + product.price().replace('.', ',') + " kr");
     }
 
-    private Categories defaultCategories() {
+    private Categories generateCategories(List<String> list) {
         Categories categories = new Categories();
-
-        categories.addCategory("bakery");
-        categories.addCategory("dairy products");
-        categories.addCategory("meat and poultry");
-        categories.addCategory("frozen foods");
-        categories.addCategory("ready meals");
-        categories.addCategory("food cupboard");
-        categories.addCategory("fruit and vegetables");
-        categories.addCategory("drinks");
-        categories.addCategory("sweets and ice-cream");
-        categories.addCategory("garden");
-        categories.addCategory("toys");
-        categories.addCategory("household");
-        categories.addCategory("toiletries");
-        categories.addCategory("health");
-        categories.addCategory("beauty");
-
+        list.forEach(categories::addCategory);
         return categories;
     }
 
@@ -165,7 +191,7 @@ public class Shop {
             return false;
         }
     }
-    
+
     private Products generateProducts(List<String[]> inputProducts, Categories categories) {
         Products products = new Products();
 
