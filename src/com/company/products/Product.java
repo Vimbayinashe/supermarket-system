@@ -13,9 +13,9 @@ public class Product {
     private final String brand;
     private final Category category;
     private BigDecimal price;
+    private int quantity;
 
-
-    public Product(long barcode, String name, String brand, Category category, String price) {
+    public Product(long barcode, String name, String brand, Category category, String price, int quantity) {
 
         //todo: add Guard.Against  the following
         /*
@@ -41,6 +41,7 @@ public class Product {
         this.brand = brand;
         this.category = category;
         this.price = convertPrice(price);
+        this.quantity = quantity;
     }
 
     public long barcode() {
@@ -78,39 +79,55 @@ public class Product {
         return (new BigDecimal(price)).setScale(scale, RoundingMode.HALF_EVEN);
     }
 
+    public int quantity() {
+        return quantity;
+    }
+
+    public void increaseQuantity(int quantity) {
+        this.quantity += quantity;
+    }
+    
+    public void decreaseQuantity(int quantity) {
+        Guard.Against.StockIsZero(quantity);
+        Guard.Against.InsufficientStock(quantity, this.quantity);
+        this.quantity -= quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return barcode == product.barcode && Objects.equals(name, product.name) && Objects.equals(brand, product.brand)
-                && Objects.equals(category, product.category) && Objects.equals(price, product.price);
+        return barcode == product.barcode && quantity == product.quantity && Objects.equals(name, product.name) &&
+                Objects.equals(brand, product.brand) && Objects.equals(category, product.category) &&
+                Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(barcode, name, brand, category, price);
+        return Objects.hash(barcode, name, brand, category, price, quantity);
     }
 
     @Override
     public String toString() {
-        return "product{" +
+        return "Product{" +
                 "barcode=" + barcode +
                 ", name='" + name + '\'' +
                 ", brand='" + brand + '\'' +
                 ", category=" + category +
                 ", price=" + price +
+                ", quantity=" + quantity +
                 '}';
     }
 
     public String toCommaSeparatedString() {
-        return barcode + "," + name + "," + brand + "," + category.name() + "," + price;
+        return barcode + "," + name + "," + brand + "," + category.name() + "," + price + "," + quantity;
     }
 
 
     public static void main(String[] args) {
         Category cheese = new Category("cheese");
-        Product product = new Product(558895651122L, "Läsk", "Mazoe", cheese, "1.5");
+        Product product = new Product(558895651122L, "Läsk", "Mazoe", cheese, "1.5", 55);
         System.out.println(product);
         System.out.println("Price as double: " + product.priceAsDouble());
         System.out.println(Double.parseDouble(product.price()) * 1.5);

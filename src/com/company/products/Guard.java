@@ -24,9 +24,9 @@ public class Guard {
                 throw new IllegalArgumentException("Amount in stock is less than the requested quantity.");
         }
 
-        public static void StockIsZero(Long barcode, int currentQuantity) {
+        public static void StockIsZero(int currentQuantity) {
             if (currentQuantity == 0)
-                throw new IllegalArgumentException("Product is currently out of stock - " + barcode);
+                throw new IllegalArgumentException("Product is currently out of stock");
         }
 
     }

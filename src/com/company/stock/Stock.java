@@ -38,7 +38,7 @@ public class Stock {
         int newQuantity = stockList.get(barcode) + quantity;
         stockList.replace(barcode, newQuantity);
     }
-
+/*
     public void decreaseQuantity(Long barcode, int quantity) {
         int currentQuantity = stockList.get(barcode);
         Guard.Against.StockIsZero(barcode, currentQuantity);
@@ -46,7 +46,7 @@ public class Stock {
 
         int newQuantity = currentQuantity - quantity;
         stockList.replace(barcode, newQuantity);
-    }
+    }*/
 
     public Set<Map.Entry<Long, Integer>> listOfStock() {
         return stockList.entrySet();
