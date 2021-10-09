@@ -11,12 +11,6 @@ public class Products {
 
     private final List<Product> products = new ArrayList<>();
 
-    //todo: can only getIndexOf(Product product) => index => getProduct(index). Also unnecessary to search for pdt here
-
-    public Long productBarcode(int index) {
-        return products.get(index).barcode();
-    }
-
     public Product getProduct(int index) {
         return products.get(index);
     }
@@ -97,13 +91,21 @@ public class Products {
                 .toList();
     }
 
+    public List<Product> sortByQuantityAscending() {
+        return products.stream()
+                .sorted(Comparator.comparing(Product::quantity))
+                .toList();
+    }
+
+    public List<Product> sortByQuantityDescending() {
+        return products.stream()
+                .sorted(Comparator.comparing(Product::quantity).reversed())
+                .toList();
+    }
+
     public Stream<Product> streamOfProducts() {
         return products.stream();
     }
-
-
-    // save changes to file
-        // ?? when stock quantity changes, product added or product removed or any of the three?
 
 }
 

@@ -153,9 +153,7 @@ public class Shop {
 
         Category category = categories.getCategory(Integer.parseInt(newProduct[3]));
 
-        Product product = new Product(
-                Long.parseLong(newProduct[0]), newProduct[1], newProduct[2], category, newProduct[4]
-        );
+        Product product = new Product(newProduct[0], newProduct[1], newProduct[2], category, newProduct[4],newProduct[5]);
 
         StockItem stockItem = new StockItem(Long.parseLong(newProduct[0]), Integer.parseInt(newProduct[5]));
 
@@ -298,8 +296,7 @@ public class Shop {
     }
 
     private Product productToProductVariable(String[] product) {
-        return new Product(Long.parseLong(product[0]), product[1], product[2], new Category(product[3]),
-                product[4]);
+        return new Product(product[0], product[1], product[2], new Category(product[3]), product[4], product[5]);
     }
 
 }
