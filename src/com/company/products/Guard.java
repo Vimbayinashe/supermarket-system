@@ -29,6 +29,31 @@ public class Guard {
                 throw new IllegalArgumentException("Product is currently out of stock");
         }
 
+        public static void InvalidBarcode(String value) {
+            try {
+                Long.parseLong(value);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid barcode - barcode should be a long.");
+            }
+        }
+
+        public static void EmptyString(String name, String value) {
+            if(value.isEmpty())
+                throw new IllegalArgumentException(name + " is an empty string");
+        }
+
+        public static void InvalidInteger(String value) {
+            try {
+                Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Quantity is not a valid integer");
+            }
+        }
+
+        public static void QuantityLessThanZero(String quantity) {
+            if (Integer.parseInt(quantity) < 0)
+                throw new IllegalArgumentException("Quantity is less than zero.");
+        }
     }
 
 }

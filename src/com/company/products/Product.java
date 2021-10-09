@@ -15,33 +15,21 @@ public class Product {
     private BigDecimal price;
     private int quantity;
 
-    public Product(long barcode, String name, String brand, Category category, String price, int quantity) {
+    public Product(String barcode, String name, String brand, Category category, String price, String quantity) {
 
-        //todo: add Guard.Against  the following
-        /*
-            category - is an element of Categories List / printout available category options b4 sm1 adds a product
-            barcode is a valid long
-            Cast to double is a valid double, price.asDouble > 0, price has maximum 2 decimal places
-            name, brand, category, price != null
-            name != empty string ""
-            quantity > 0
+        Guard.Against.InvalidBarcode(barcode);
+        Guard.Against.EmptyString("name", name);
+        Guard.Against.EmptyString("brand", brand);
+        Guard.Against.InvalidPriceFormat(price);
+        Guard.Against.InvalidInteger(quantity);
+        Guard.Against.QuantityLessThanZero(quantity);
 
-            Invalid argument should throw an error
-
-            => create Guards & re-use code in price & quantity setters
-
-            Add try catch block around new Product creation.
-         */
-
-        //todo: verify that categories contains suggested category before creating a new Category
-
-
-        this.barcode = barcode;
+        this.barcode = Long.parseLong(barcode);
         this.name = name;
         this.brand = brand;
         this.category = category;
         this.price = convertPrice(price);
-        this.quantity = quantity;
+        this.quantity = Integer.parseInt(quantity);
     }
 
     public long barcode() {
@@ -86,7 +74,7 @@ public class Product {
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
     }
-    
+
     public void decreaseQuantity(int quantity) {
         Guard.Against.StockIsZero(quantity);
         Guard.Against.InsufficientStock(quantity, this.quantity);
@@ -127,7 +115,7 @@ public class Product {
 
     public static void main(String[] args) {
         Category cheese = new Category("cheese");
-        Product product = new Product(558895651122L, "Läsk", "Mazoe", cheese, "1.5", 55);
+        Product product = new Product("558895651122L", "Läsk", "Mazoe", cheese, "1.5", "55");
         System.out.println(product);
         System.out.println("Price as double: " + product.priceAsDouble());
         System.out.println(Double.parseDouble(product.price()) * 1.5);
