@@ -19,7 +19,7 @@ public class Products {
         products.add(product);
     }
 
-    public List<Product> listOfProducts() {
+    public List<Product> products() {
         return List.copyOf(products);
     }
 

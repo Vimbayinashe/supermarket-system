@@ -36,12 +36,12 @@ public class Shop {
         products = getProducts(categories, defaultData.inventoryList());
         stock = getStock(categories, defaultData.inventoryList());
 
-        boolean addProduct = false;
+        //boolean addProduct = false;
 
         //menu Options
             //option that changes addProduct to true
 
-        while(addProduct) {
+        /*while(addProduct) {
             Optional<NewProduct> newProduct = addNewProduct(categories);
 
             if (newProduct.isPresent()) {
@@ -49,7 +49,7 @@ public class Shop {
                 stock.addProduct(newProduct.get().stockItem());
             }
             addProduct = false;
-        }
+        }*/
 
         //printProductsCustomerView(products.listOfProducts());
 
@@ -94,10 +94,10 @@ public class Shop {
 //        List<Product> sortedByPrice = products.sortByBrandDescending();
 //        printProductsCustomerView(sortedByPrice);
 
-        //todo? : let user enter desire filename? writing over current file is easiest
+
         saveFile(categories.listOfStrings(), "categories");
 
-        List<String> combined = listOfProductsAndStock(products, stock);
+        List<String> combined = commaSeparatedListOfProducts(products);
         saveFile(combined, "products and quantities");
 
 
@@ -127,12 +127,12 @@ public class Shop {
                 //return Optional.empty();
             }
 
-            if (invalidInt(newProduct[3]) || Integer.parseInt(newProduct[3]) > categories.categories().size()) {
+            if (!validInt(newProduct[3]) || Integer.parseInt(newProduct[3]) > categories.categories().size()) {
                 System.out.println("Invalid category entered.");
                 //return Optional.empty();
             }
 
-            if (invalidInt(newProduct[5])) {
+            if (!validInt(newProduct[5])) {
                 System.out.println("Product's quantity is an invalid number.");
                 //return Optional.empty();
             }
@@ -170,8 +170,8 @@ public class Shop {
     }
 
     private Stock getStock(Categories categories, List<String[]> defaultInventory) {
-        if(Files.exists(getPath("Default Product Details and Inventory"))) {
-            List<String[]> data = readFile("Default Product Details and Inventory");
+        if(Files.exists(getPath("Default Products"))) {
+            List<String[]> data = readFile("Default Products");
             return dataToStock(data, categories);
         }
         else
@@ -227,9 +227,9 @@ public class Shop {
         return Path.of("resources", fileName);
     }
 
-    private List<String> listOfProductsAndStock(Products products, Stock stock) {
+    private List<String> commaSeparatedListOfProducts(Products products) {
         return products.streamOfProducts()
-                .map(product -> product.toCommaSeparatedString() + "," + stock.getQuantity(product.barcode()))
+                .map(Product::toCommaSeparatedString)
                 .toList();
     }
 
@@ -275,12 +275,24 @@ public class Shop {
         }
     }
 
-    private boolean invalidInt(String value) {
+    private boolean validInt(String value) {
         try {
             Integer.parseInt(value);
-            return false;
-        } catch (NumberFormatException e) {
             return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean validPriceFormat(String price) {
+        try {
+            if(price.contains(","))
+                Double.parseDouble(price.replace(",", "."));
+            else
+                Double.parseDouble(price);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
@@ -288,8 +300,10 @@ public class Shop {
         Products products = new Products();
 
         inputProducts.stream()
-                .filter(product -> categories.contains(product[3]))
                 .filter(product -> validLong(product[0]))
+                .filter(product -> categories.contains(product[3]))
+                .filter(product -> validPriceFormat(product[4]))
+                .filter(product -> validInt(product[5]))
                 .map(this::productToProductVariable)
                 .forEach(products::addProduct);
         return products;

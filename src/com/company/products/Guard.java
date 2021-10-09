@@ -8,7 +8,8 @@ public class Guard {
             try {
                 if(price.contains(","))
                     Double.parseDouble(price.replace(",", "."));
-                Double.parseDouble(price);
+                else
+                    Double.parseDouble(price);
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException(price + " is not a valid price format.");
             }
