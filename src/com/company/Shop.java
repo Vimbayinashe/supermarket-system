@@ -2,10 +2,7 @@ package com.company;
 
 import com.company.categories.Categories;
 import com.company.categories.Category;
-import com.company.products.DefaultData;
-import com.company.products.NewProduct;
-import com.company.products.Product;
-import com.company.products.Products;
+import com.company.products.*;
 import com.company.stock.Stock;
 import com.company.stock.StockItem;
 
@@ -39,74 +36,20 @@ public class Shop {
         products = getProducts(categories, defaultData.inventoryList());
         stock = getStock(categories, defaultData.inventoryList());
 
-        //print numbered list of categories
-        printCategories(categories.categories());
+        boolean addProduct = false;
 
-        //capture input from user barcode, name, brand, category, price, quantity
-        System.out.println("Enter product barcode, name, brand, categoryNumber, price & quantity separated by a comma");
-        System.out.println("example: 7123456789900, sparkling water, MyBrand, 8, 12.50, 500");
-        //split by "," , trim spaces, c
-        //getCategory from input number (position)
-        //check validLong(product[0]) -> print fail message & return if(Long.parseLong error)
-        //return Optional? new ProductStockItem(Product, StockItem),
+        //menu Options
+            //option that changes addProduct to true
 
-        // if(Optional is not empty)
-        //create newProduct & add to products    products.addProduct(String[] newProduct)
-        //create StockItem & add to stock       stock.addProduct(List newStockItem)
+        while(addProduct) {
+            Optional<NewProduct> newProduct = addNewProduct(categories);
 
-        String[] newProduct1 = pattern.split(scanner.nextLine());
-
-        String[] newProduct = Arrays.stream(newProduct1).map(String::trim).toArray(String[]::new);
-
-        System.out.println(Arrays.toString(newProduct));
-        //List<String[]> prods = List.of(newProduct);
-
-        if(newProduct.length != 6) {
-            System.out.println("Please enter six properties for the new product.");
-            //return Optional.empty();
+            if (newProduct.isPresent()) {
+                products.addProduct((newProduct.get().product()));
+                stock.addProduct(newProduct.get().stockItem());
+            }
+            addProduct = false;
         }
-        if (!validLong(newProduct[0].trim())) {
-            System.out.println("Invalid barcode entered.");
-            //return;  Optional.empty() ?
-        }
-        if(invalidInt(newProduct[3].trim()) || Integer.parseInt(newProduct[3].trim()) > categories.categories().size())
-            System.out.println("Invalid category entered.");
-
-        if(invalidInt(newProduct[5].trim())){
-            System.out.println("Product's quantity is an invalid number.");
-            //return;  Optional ?
-        }
-        if(Integer.parseInt(newProduct[5].trim()) < 0){
-            System.out.println("Product's quantity is less than zero.");
-            //return;  Optional ?
-        }
-
-        //todo: handle wrong price format
-
-        Category category = categories.getCategory(Integer.parseInt(newProduct[3].trim())); //perhaps string
-
-        Product product = new Product(
-                Long.parseLong(newProduct[0]), newProduct[1], newProduct[2], category, newProduct[4]
-        );
-
-        StockItem stockItem = new StockItem(
-                Long.parseLong(newProduct[0].trim()), Integer.parseInt(newProduct[5].trim())
-        );
-
-        Optional<NewProduct> result = Optional.of(new NewProduct(product, stockItem));
-        //return result;
-
-        //todo: convert result into a "NewProduct" record with (Product, StockItem),
-        // return Optional<NewProduct>  & addProduct(NewProduct.product), addProduct(NewProduct, stockItem)
-
-
-        //todo: everything in a while loop until user cancels or addsNewProduct
-
-        //feedback if producted added or failed(wrong barcode, qty etc)
-
-        //addNewProduct().ifPresent(categories.addCategory(result));
-
-        //addNewProduct();
 
         //printProductsCustomerView(products.listOfProducts());
 
@@ -151,24 +94,81 @@ public class Shop {
 //        List<Product> sortedByPrice = products.sortByBrandDescending();
 //        printProductsCustomerView(sortedByPrice);
 
-        //todo? : add date-timestamp combo to file name (if time permits),
-        // let user enter desire filename? writing over current file is easiest
+        //todo? : let user enter desire filename? writing over current file is easiest
         saveFile(categories.listOfStrings(), "categories");
 
         List<String> combined = listOfProductsAndStock(products, stock);
         saveFile(combined, "products and quantities");
+
+
+    }
+
+    private Optional<NewProduct> addNewProduct(Categories categories) {
+
+        printCategories(categories.categories());
+
+        //todo: everything in a while loop until user cancels or addsNewProduct
+
+        String[] newProduct;
+        while (true) {
+            System.out.println("Enter product barcode, name, brand, categoryNumber, price & quantity separated by a comma");
+            System.out.println("example: 7123456789900, sparkling water, MyBrand, 8, 12.50, 500");
+
+            String[] userInput = pattern.split(scanner.nextLine());
+            newProduct = Arrays.stream(userInput).map(String::trim).toArray(String[]::new);
+
+            if (newProduct.length != 6) {
+                System.out.println("Please enter six properties for the new product.");
+                //return Optional.empty();
+            }
+
+            if (!validLong(newProduct[0])) {
+                System.out.println("Invalid barcode entered.");
+                //return Optional.empty();
+            }
+
+            if (invalidInt(newProduct[3]) || Integer.parseInt(newProduct[3]) > categories.categories().size()) {
+                System.out.println("Invalid category entered.");
+                //return Optional.empty();
+            }
+
+            if (invalidInt(newProduct[5])) {
+                System.out.println("Product's quantity is an invalid number.");
+                //return Optional.empty();
+            }
+
+            if (Integer.parseInt(newProduct[5]) < 0) {
+                System.out.println("Product's quantity is less than zero.");
+                //return Optional.empty();
+                break;
+            }
+
+            try {
+                Guard.Against.InvalidPriceFormat(newProduct[4]);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                //return Optional.empty();
+            }
+        }
+
+        Category category = categories.getCategory(Integer.parseInt(newProduct[3]));
+
+        Product product = new Product(
+                Long.parseLong(newProduct[0]), newProduct[1], newProduct[2], category, newProduct[4]
+        );
+
+        StockItem stockItem = new StockItem(Long.parseLong(newProduct[0]), Integer.parseInt(newProduct[5]));
+
+        return Optional.of(new NewProduct(product, stockItem));
     }
 
     private void printCategories(List<Category> categories) {
+        System.out.println("Product categories");
         categories.forEach(category -> printCategory(categories, category));
     }
 
     private void printCategory(List<Category> categories, Category category) {
         System.out.println(categories.indexOf(category) + 1 + ". " + category.name());
-    }
-
-    private Optional<String[]> addNewProduct() {
-        return Optional.empty();
     }
 
     private Stock getStock(Categories categories, List<String[]> defaultInventory) {
