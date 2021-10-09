@@ -3,6 +3,7 @@ package com.company;
 import com.company.categories.Categories;
 import com.company.categories.Category;
 import com.company.products.DefaultData;
+import com.company.products.NewProduct;
 import com.company.products.Product;
 import com.company.products.Products;
 import com.company.stock.Stock;
@@ -11,13 +12,17 @@ import com.company.stock.StockItem;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Shop {
 
     private static final Pattern pattern = Pattern.compile(",");
+    private final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         Shop shop = new Shop();
@@ -34,7 +39,76 @@ public class Shop {
         products = getProducts(categories, defaultData.inventoryList());
         stock = getStock(categories, defaultData.inventoryList());
 
-        printProductsCustomerView(products.listOfProducts());
+        //print numbered list of categories
+        printCategories(categories.categories());
+
+        //capture input from user barcode, name, brand, category, price, quantity
+        System.out.println("Enter product barcode, name, brand, categoryNumber, price & quantity separated by a comma");
+        System.out.println("example: 7123456789900, sparkling water, MyBrand, 8, 12.50, 500");
+        //split by "," , trim spaces, c
+        //getCategory from input number (position)
+        //check validLong(product[0]) -> print fail message & return if(Long.parseLong error)
+        //return Optional? new ProductStockItem(Product, StockItem),
+
+        // if(Optional is not empty)
+        //create newProduct & add to products    products.addProduct(String[] newProduct)
+        //create StockItem & add to stock       stock.addProduct(List newStockItem)
+
+        String[] newProduct1 = pattern.split(scanner.nextLine());
+
+        String[] newProduct = Arrays.stream(newProduct1).map(String::trim).toArray(String[]::new);
+
+        System.out.println(Arrays.toString(newProduct));
+        //List<String[]> prods = List.of(newProduct);
+
+        if(newProduct.length != 6) {
+            System.out.println("Please enter six properties for the new product.");
+            //return Optional.empty();
+        }
+        if (!validLong(newProduct[0].trim())) {
+            System.out.println("Invalid barcode entered.");
+            //return;  Optional.empty() ?
+        }
+        if(invalidInt(newProduct[3].trim()) || Integer.parseInt(newProduct[3].trim()) > categories.categories().size())
+            System.out.println("Invalid category entered.");
+
+        if(invalidInt(newProduct[5].trim())){
+            System.out.println("Product's quantity is an invalid number.");
+            //return;  Optional ?
+        }
+        if(Integer.parseInt(newProduct[5].trim()) < 0){
+            System.out.println("Product's quantity is less than zero.");
+            //return;  Optional ?
+        }
+
+        //todo: handle wrong price format
+
+        Category category = categories.getCategory(Integer.parseInt(newProduct[3].trim())); //perhaps string
+
+        Product product = new Product(
+                Long.parseLong(newProduct[0]), newProduct[1], newProduct[2], category, newProduct[4]
+        );
+
+        StockItem stockItem = new StockItem(
+                Long.parseLong(newProduct[0].trim()), Integer.parseInt(newProduct[5].trim())
+        );
+
+        Optional<NewProduct> result = Optional.of(new NewProduct(product, stockItem));
+        //return result;
+
+        //todo: convert result into a "NewProduct" record with (Product, StockItem),
+        // return Optional<NewProduct>  & addProduct(NewProduct.product), addProduct(NewProduct, stockItem)
+
+
+        //todo: everything in a while loop until user cancels or addsNewProduct
+
+        //feedback if producted added or failed(wrong barcode, qty etc)
+
+        //addNewProduct().ifPresent(categories.addCategory(result));
+
+        //addNewProduct();
+
+        //printProductsCustomerView(products.listOfProducts());
 
         //Search for product in Stock using barcode
 //        System.out.println(products.getProduct(1).barcode());
@@ -85,6 +159,18 @@ public class Shop {
         saveFile(combined, "products and quantities");
     }
 
+    private void printCategories(List<Category> categories) {
+        categories.forEach(category -> printCategory(categories, category));
+    }
+
+    private void printCategory(List<Category> categories, Category category) {
+        System.out.println(categories.indexOf(category) + 1 + ". " + category.name());
+    }
+
+    private Optional<String[]> addNewProduct() {
+        return Optional.empty();
+    }
+
     private Stock getStock(Categories categories, List<String[]> defaultInventory) {
         if(Files.exists(getPath("Default Product Details and Inventory"))) {
             List<String[]> data = readFile("Default Product Details and Inventory");
@@ -103,12 +189,12 @@ public class Shop {
             return dataToProducts(defaultInventory, categories);
     }
 
-    private Categories getCategories(List<String> defaultData) {
+    private Categories getCategories(List<String> defaultCategories) {
         if(Files.exists(getPath("Default Categories"))) {
             List<String> categoriesData = readFileWithOneColumn("Default Categories");
             return dataToCategories(categoriesData);
         } else
-            return dataToCategories(defaultData);
+            return dataToCategories(defaultCategories);
     }
 
     private List<String> readFileWithOneColumn(String name) {
@@ -188,6 +274,15 @@ public class Shop {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    private boolean invalidInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 
