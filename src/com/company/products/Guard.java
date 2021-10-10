@@ -57,4 +57,25 @@ public class Guard {
         }
     }
 
+    public static class CheckFor {
+
+        public static boolean ValidLong(String value) {
+            try {
+                Long.parseLong(value);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        public static boolean ValidInt(String value) {
+            try {
+                Integer.parseInt(value);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+    }
+
 }
