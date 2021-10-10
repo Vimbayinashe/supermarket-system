@@ -2,6 +2,7 @@ package com.company.products;
 
 import com.company.Command;
 import com.company.Menu;
+import com.company.categories.Categories;
 import com.company.categories.Category;
 
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class Products implements Command {
     }
 
     @Override
-    public void execute(String option) {
+    public void execute(String option, Object categories) {
 
         switch(option) {
             case "view" -> viewProducts();

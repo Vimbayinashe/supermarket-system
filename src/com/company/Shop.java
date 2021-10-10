@@ -114,10 +114,10 @@ public class Shop {
     private void executeSelection(int selection, Categories categories, Products products) {
         switch (selection) {
             case 0 -> System.out.println("Shutdown program 0");
-            case 1 -> commands[0].execute("view");
+            case 1 -> commands[0].execute("view", categories);
             case 2 -> System.out.println("Chose 2: buy products");
-            case 3 -> commands[0].execute("add");
-            case 4 -> commands[1].execute("");
+            case 3 -> commands[0].execute("add", categories);
+            case 4 -> commands[1].execute("", "");
             case 5 -> System.out.println("Chose 5: update products / price");
         }
     }
