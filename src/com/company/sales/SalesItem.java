@@ -9,6 +9,7 @@ public final class SalesItem {
     private final String name;
     private final String brand;
     private final String unitPrice;
+    private final String subTotal;
     private final int quantity;
 
     public SalesItem(Product product, int quantity) {
@@ -16,6 +17,7 @@ public final class SalesItem {
         this.name = product.name();
         this.brand = product.brand();
         this.unitPrice = product.price();
+        this.subTotal = String.valueOf(product.priceAsDouble() * quantity);
         this.quantity = quantity;
     }
 
@@ -35,43 +37,43 @@ public final class SalesItem {
         return unitPrice;
     }
 
+    public String getSubTotal() {
+        return subTotal;
+    }
+
     public int quantity() {
         return quantity;
     }
 
     public String toCommaSeparatedString() {
-        return barcode + "," + name + "," + brand + "," + unitPrice + "," + quantity;
+        return barcode + "," + name + "," + brand + "," + unitPrice + "," + quantity + "," + subTotal;
     }
     public String toCustomerViewString() {
-        return name + " " + brand +  " " + unitPrice + " " + quantity;
+        return name + " " + brand +  " " + unitPrice + "kr " + quantity + " " + subTotal + "kr";
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (SalesItem) obj;
-        return this.barcode == that.barcode &&
-                Objects.equals(this.name, that.name) &&
-                Objects.equals(this.brand, that.brand) &&
-                Objects.equals(this.unitPrice, that.unitPrice) &&
-                this.quantity == that.quantity;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SalesItem salesItem = (SalesItem) o;
+        return barcode == salesItem.barcode && quantity == salesItem.quantity && Objects.equals(name, salesItem.name) && Objects.equals(brand, salesItem.brand) && Objects.equals(unitPrice, salesItem.unitPrice) && Objects.equals(subTotal, salesItem.subTotal);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(barcode, name, brand, unitPrice, quantity);
+        return Objects.hash(barcode, name, brand, unitPrice, subTotal, quantity);
     }
 
     @Override
     public String toString() {
-        return "SalesItem[" +
-                "barcode=" + barcode + ", " +
-                "name=" + name + ", " +
-                "brand=" + brand + ", " +
-                "unitPrice=" + unitPrice + ", " +
-                "quantity=" + quantity + ']';
+        return "SalesItem{" +
+                "barcode=" + barcode +
+                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", unitPrice='" + unitPrice + '\'' +
+                ", subTotal='" + subTotal + '\'' +
+                ", quantity=" + quantity +
+                '}';
     }
-
-
 }

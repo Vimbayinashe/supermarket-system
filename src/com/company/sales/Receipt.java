@@ -17,7 +17,7 @@ public final class Receipt {
         this.receiptNumber = String.valueOf(Instant.now().getEpochSecond());;
         this.items = new ArrayList<>();
         this.totalPrice = "0.0";
-        this.discount = "0%";
+        this.discount = "0.0";
     }
 
     public Receipt(List<SalesItem> items, String totalPrice, String discount) {
@@ -56,10 +56,11 @@ public final class Receipt {
 
     public void printReceipt() {
         System.out.println("Receipt number: " + receiptNumber);
-        System.out.println("Product name, brand, unit price, quantity");
+        System.out.println("Product name, brand, unit price, quantity, sub-total");
         items.stream()
                 .map(SalesItem::toCustomerViewString)
                 .forEach(System.out::println);
+        System.out.println("Discount received: " + discount + " kr");
         System.out.println("Total price: " + totalPrice + " kr");
 
     }
