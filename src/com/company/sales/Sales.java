@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,16 +26,10 @@ public class Sales implements Command {
         receipts.add(receipt);
     }
 
-
-    public void printProductList(List<Product> list) {
-
-    }
-
     public void saveReceipt(Receipt receipt) {
 
         String fileName ="Receipt-" + receipt.receiptNumber() + ".csv";
         Path path =  Path.of("resources", "receipts", fileName);
-
 
         try {
             Files.createDirectories(path.getParent());
@@ -87,7 +80,7 @@ public class Sales implements Command {
                 System.out.print("Selected: ");
                 product.toCustomerViewString();
 
-                System.out.println("Enter how many " + product.name() + " you want to buy: ");
+                System.out.println("Enter how many you want to buy: ");
                 int quantity = scanner.nextInt();
                 scanner.nextLine();
                 if(quantity < 1)
@@ -107,7 +100,7 @@ public class Sales implements Command {
             if (convertToDouble(totalPrice) > 500) {
                 BigDecimal newTotalPrice = Discounter.largePurchaseDiscounter().applyDiscount(totalPrice);
                 discount = convertPrice(convertToDouble(totalPrice) - convertToDouble(newTotalPrice));
-                totalPrice = newTotalPrice;
+                totalPrice = newTotalPrice.setScale(2, RoundingMode.HALF_EVEN);
             }
 
             receipt = new Receipt(purchases, String.valueOf(totalPrice), String.valueOf(discount));
@@ -115,7 +108,6 @@ public class Sales implements Command {
         }
 
         receipt.printReceipt();
-
         saveReceipt(receipt);
 
     }

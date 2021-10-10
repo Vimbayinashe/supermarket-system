@@ -38,8 +38,6 @@ public class Shop {
             executeSelection(selection, categories, products);
         } while (selection != 0);
 
-
-        saveFiles(categories, products);
     }
 
     private void saveFiles(Categories categories, Products products) {
@@ -212,37 +210,3 @@ public class Shop {
 
 }
 
-/*
-*   todo: purchase loop
-*    print product list
-*     option to search by name, price range, sort
-*    user chooses product by index, print product details, confirm product
-*   request quantity, user inputs
-*   print list or user chooses (finished selecting products)
-*   user see product name, brand, indiv pric, quantity, subtotal per product    & last line: final price
-*   user confirms purchase or cancel
-*   receipt with (above info again)
-*   receipt saved to file
- */
-
-
-/*
- *   Creating new products
- *   check user input for correct values & give feedback / don't attempt to create new items & crash your program
- *       - int(price), long(barcode), valid category
- *
- *   product details -> create new item in Products (list of available products)
- *   product.barcode & quantity -> added to Stock
- */
-
-
-/*
- *   check that quantity > 0 && quantity-purchase > 0
- *   check that "new" product barcode is not present in stock   &   product Item is not present in Products (list)
- */
-
-
-/*
- * adding new category -> english only, check current list first <= request user
- * read Martin's message on Teams also
- */
