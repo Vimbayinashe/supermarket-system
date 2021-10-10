@@ -15,6 +15,7 @@ public class Shop {
 
     private static final Pattern pattern = Pattern.compile(",");
     private final Scanner scanner = new Scanner(System.in);
+    private Command[] commands = new Command[5];
 
     public static void main(String[] args) {
         Shop shop = new Shop();
@@ -25,6 +26,9 @@ public class Shop {
         Categories categories = new Categories();
         Products products = new Products();
         DefaultData defaultData = new DefaultData();
+        //Command[] commands = new Command[] { categories };
+        commands = new Command[] { categories };
+        //commands[0].execute();
 
         categories = getCategories(defaultData.categories());
         products = getProducts(categories, defaultData.inventoryList());
@@ -34,7 +38,7 @@ public class Shop {
         do {
             printMenuOptions();
             selection = handleSelection(scanner);
-            
+            executeSelection(selection, categories, products);
         } while (selection != 0);
 
 
@@ -99,6 +103,17 @@ public class Shop {
 
     }
 
+    private void executeSelection(int selection, Categories categories, Products products) {
+        switch (selection) {
+            case 0 -> System.out.println("Shutdown program 0");
+            case 1 -> System.out.println("Chose 1: view products");
+            case 2 -> System.out.println("Chose 2: buy products");
+            case 3 -> System.out.println("Chose 4. Add new category");
+            case 4 -> commands[0].execute();
+            case 5 -> System.out.println("Chose 5: update products / price");
+        }
+    }
+
     private int handleSelection (Scanner scanner) {
         int selection = 0;
         while (true) {
@@ -114,7 +129,6 @@ public class Shop {
             } else
                 break;
         }
-
         return selection;
     }
 
@@ -130,6 +144,19 @@ public class Shop {
                 0. Exit program
                 """
         );
+
+        /*
+            System.out.println(
+                """
+                Welcome to The Shop, what would you like to do today?
+                1. Add a new product
+                2. Add a new category
+                3. Buy some products
+                4. Update product price or quantity
+                0. Exit program
+                """
+        );
+         */
     }
 
     private Product addNewProduct(Categories categories) {

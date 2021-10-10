@@ -1,12 +1,15 @@
 package com.company.categories;
 
+import com.company.Command;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class Categories {
-
+public class Categories implements Command {
     private final List<Category> categories = new ArrayList<>();
+    Scanner scanner = new Scanner(System.in);
 
     public void addCategory(String name) {
         String formattedName = name.toLowerCase();
@@ -66,5 +69,17 @@ public class Categories {
         categories.printCategoriesAsNumberedList();
     }
 
+    @Override
+    public void execute() {
+        System.out.println("Enter a new category name");
+        String input = scanner.nextLine();
+
+        try {
+            addCategory(input);
+            System.out.println(input + " successfully added.");
+        } catch(IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
