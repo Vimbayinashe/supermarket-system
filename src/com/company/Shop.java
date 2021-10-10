@@ -32,24 +32,19 @@ public class Shop {
         categories = getCategories(defaultData.categories());
         products = getProducts(categories, defaultData.inventoryList());
 
-
-
+        //add a new product todo: as a method on Products?
+            //update product qty, price, even Categories.new()
         printCategories(categories.categories());
-        // print instructions & user input reciveed & processed
         Product newProduct = addNewProduct(categories);
-        //update products
         products.addProduct(newProduct);
 
 
-
-
+        //todo: Sale
+        //product printing, filter (see Sales) performed here
+        //produces a list<Product> (as above)
+        //sales receipt created & products stock decreases
 
         //printProductsCustomerView(products.listOfProducts());
-
-        //Search for product in Stock using barcode
-//        System.out.println(products.getProduct(1).barcode());
-//        System.out.println(products.productBarcode(1));
-
 
         /* implementation of methods for: filtering, searching for price intervals, categories, product name/part of
         pdt name, brand sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
