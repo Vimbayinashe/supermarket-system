@@ -26,12 +26,20 @@ public class Shop {
         Categories categories = new Categories();
         Products products = new Products();
         DefaultData defaultData = new DefaultData();
-        //Command[] commands = new Command[] { categories };
-        commands = new Command[] { categories };
-        //commands[0].execute();
 
         categories = getCategories(defaultData.categories());
         products = getProducts(categories, defaultData.inventoryList());
+
+        //Command[] commands = new Command[] { categories };
+        Products finalProducts = products;
+
+        commands = new Command[] {
+                () -> printProductsCustomerView(finalProducts.products()),
+                categories
+        };
+        //commands[0].execute();
+
+
 
         //Menu
         int selection = 0;
@@ -106,10 +114,10 @@ public class Shop {
     private void executeSelection(int selection, Categories categories, Products products) {
         switch (selection) {
             case 0 -> System.out.println("Shutdown program 0");
-            case 1 -> System.out.println("Chose 1: view products");
+            case 1 -> commands[0].execute();
             case 2 -> System.out.println("Chose 2: buy products");
             case 3 -> System.out.println("Chose 4. Add new category");
-            case 4 -> commands[0].execute();
+            case 4 -> commands[1].execute();
             case 5 -> System.out.println("Chose 5: update products / price");
         }
     }
