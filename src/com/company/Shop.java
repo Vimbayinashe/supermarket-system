@@ -3,8 +3,6 @@ package com.company;
 import com.company.categories.Categories;
 import com.company.categories.Category;
 import com.company.products.*;
-import com.company.stock.Stock;
-import com.company.stock.StockItem;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,12 +27,10 @@ public class Shop {
     private void run() {
         Categories categories = new Categories();
         Products products = new Products();
-        Stock stock = new Stock();
         DefaultData defaultData = new DefaultData();
 
         categories = getCategories(defaultData.categories());
         products = getProducts(categories, defaultData.inventoryList());
-        stock = getStock(categories, defaultData.inventoryList());
 
         //boolean addProduct = false;
 
@@ -46,7 +42,6 @@ public class Shop {
 
             if (newProduct.isPresent()) {
                 products.addProduct((newProduct.get().product()));
-                stock.addProduct(newProduct.get().stockItem());
             }
             addProduct = false;
         }*/
@@ -98,12 +93,12 @@ public class Shop {
         saveFile(categories.listOfStrings(), "categories");
 
         List<String> combined = commaSeparatedListOfProducts(products);
-        saveFile(combined, "products and quantities");
+        saveFile(combined, "products");
 
 
     }
 
-    private Optional<NewProduct> addNewProduct(Categories categories) {
+    private Optional<Product> addNewProduct(Categories categories) {
 
         printCategories(categories.categories());
 
@@ -155,9 +150,7 @@ public class Shop {
 
         Product product = new Product(newProduct[0], newProduct[1], newProduct[2], category, newProduct[4],newProduct[5]);
 
-        StockItem stockItem = new StockItem(Long.parseLong(newProduct[0]), Integer.parseInt(newProduct[5]));
-
-        return Optional.of(new NewProduct(product, stockItem));
+        return Optional.of(product);
     }
 
     private void printCategories(List<Category> categories) {
@@ -167,15 +160,6 @@ public class Shop {
 
     private void printCategory(List<Category> categories, Category category) {
         System.out.println(categories.indexOf(category) + 1 + ". " + category.name());
-    }
-
-    private Stock getStock(Categories categories, List<String[]> defaultInventory) {
-        if(Files.exists(getPath("Default Products"))) {
-            List<String[]> data = readFile("Default Products");
-            return dataToStock(data, categories);
-        }
-        else
-            return dataToStock(defaultInventory, categories);
     }
 
     private Products getProducts(Categories categories, List<String[]> defaultInventory) {
@@ -249,21 +233,6 @@ public class Shop {
         Categories categories = new Categories();
         list.forEach(categories::addCategory);
         return categories;
-    }
-
-    private Stock dataToStock(List<String[]> products, Categories categories) {
-        Stock stock = new Stock();
-
-        products.stream()
-                .filter(product -> categories.contains(product[3]))
-                .filter(product -> validLong(product[0]))
-                .map(this::productToStockItem)
-                .forEach(stock::addProduct);
-        return stock;
-    }
-
-    private StockItem productToStockItem(String[] product) {
-        return new StockItem(Long.parseLong(product[0]), Integer.parseInt(product[5]));
     }
 
     private boolean validLong(String value) {
