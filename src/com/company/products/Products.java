@@ -14,6 +14,7 @@ public class Products implements Command {
     private final List<Product> products = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private static final Pattern pattern = Pattern.compile(",");
+    private static final Pattern hyphenPattern = Pattern.compile("-");
 
     public Product getProduct(int index) {
         return products.get(index);
@@ -241,7 +242,7 @@ public class Products implements Command {
         );
     }
 
-    private void viewProducts() {
+    public void viewProducts() {
         printProductsCustomerView(products);
         int selection = 0;
         do {
@@ -250,6 +251,42 @@ public class Products implements Command {
             executeSelection(selection);
         } while (selection != 0);
 
+    }
+
+    public List<Product> productsForPurchase() {
+        printSalesProductsMenu();
+        int selection = Menu.handleSelection(scanner, 7);
+
+        return saleSelection(selection);
+    }
+
+    private List<Product> saleSelection (int selection) {
+        return switch (selection) {
+            case 0 -> products();
+            case 1 -> sortByNameAscending();
+            case 2 -> sortByNameDescending();
+            case 3 -> sortByPriceAscending();
+            case 4 -> sortByPriceDescending();
+            case 5 -> handleSaleProductFilter();
+            case 6 -> handleSaleCategoryFilter();
+            case 7 -> handleSalePriceFilter();
+            default -> List.of();
+        };
+    }
+
+    private List<Product> handleSalePriceFilter() {
+        List<Product> list;
+        String [] range;
+        while(true) {
+            System.out.println("Enter price range as 0-100");
+            range = hyphenPattern.split(scanner.nextLine());
+            try {
+               list = filterByPriceRange(range[0], range[1]);
+               return list;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getLocalizedMessage());
+            }
+        }
     }
 
     private void executeSelection(int selection) {
@@ -269,10 +306,22 @@ public class Products implements Command {
         printProductsCustomerView(filterByCategory(new Category(input)));
     }
 
+    private List<Product> handleSaleCategoryFilter() {
+        System.out.println("Enter product category");
+        String input = scanner.nextLine().trim();
+        return filterByCategory(new Category(input));
+    }
+
     private void handleProductFilter() {
         System.out.println("Enter product name or brand");
         String input = scanner.nextLine().trim();
-            printProductsCustomerView(filterByNameAndBrand(input));
+        printProductsCustomerView(filterByNameAndBrand(input));
+    }
+
+    private List<Product> handleSaleProductFilter() {
+        System.out.println("Enter product name or brand");
+        String input = scanner.nextLine().trim();
+        return filterByNameAndBrand(input);
     }
 
     private void printProductsViewMenu() {
@@ -291,7 +340,24 @@ public class Products implements Command {
         );
     }
 
-    private void printProductsCustomerView(List<Product> products) {
+    public void printSalesProductsMenu() {
+            System.out.println(
+                    """
+                    
+                    Select format to view products:
+                        1. Sorted (A-Z)
+                        2. Sorted (Z-A)
+                        3. Sorted (cheapest first)
+                        4. Sorted (most expensive first)
+                        5. Filtered by name or brand
+                        6. Filtered by category
+                        7. Filtered by price range
+                        0. All products
+                    """
+            );
+    }
+
+    public void printProductsCustomerView(List<Product> products) {
         if (products.isEmpty())
             System.out.println("No products found.");
         else

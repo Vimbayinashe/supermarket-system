@@ -3,16 +3,24 @@ package com.company.sales;
 import com.company.products.Product;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public final class Receipt {
     private final long receiptNumber;
-    private final List<Product> items;
+    private final List<SalesItem> items;
     private final String totalPrice;
     private final String discount;
 
-    public Receipt(List<Product> items, String totalPrice, String discount) {
+    public Receipt() {
+        this.receiptNumber = Instant.now().getEpochSecond();
+        this.items = new ArrayList<>();
+        this.totalPrice = "0.0";
+        this.discount = "0%";
+    }
+
+    public Receipt(List<SalesItem> items, String totalPrice, String discount) {
         this.receiptNumber = Instant.now().getEpochSecond();
         this.items = items;
         this.totalPrice = totalPrice;
@@ -23,7 +31,7 @@ public final class Receipt {
         return receiptNumber;
     }
 
-    public List<Product> items() {
+    public List<SalesItem> items() {
         return items;
     }
 
@@ -36,10 +44,20 @@ public final class Receipt {
     }
 
     public List<String> commaSeparatedValues() {
-        List<String> list = items.stream().map(Product::toCommaSeparatedString).toList();
+        List<String> list = items.stream().map(SalesItem::toCommaSeparatedString).toList();
         list.add(0, receiptNumber + "," + totalPrice + "," + discount);
 
         return list;
+    }
+
+    public void printReceipt() {
+        System.out.println("Receipt number: " + receiptNumber);
+        System.out.println("Products:");
+        items.stream()
+                .map(SalesItem::toCustomerViewString)
+                .forEach(System.out::println);
+        System.out.println("Total price: " + totalPrice + " kr");
+
     }
 
     @Override

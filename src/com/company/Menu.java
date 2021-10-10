@@ -1,6 +1,9 @@
 package com.company;
 
+import com.company.products.Product;
+
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -20,5 +23,14 @@ public class Menu {
                 break;
         }
         return selection;
+    }
+
+    public static void printProductsCustomerView(List<Product> products) {
+        if (products.isEmpty())
+            System.out.println("No products found.");
+        else
+            products.forEach(
+                    product ->  System.out.println((products.indexOf(product) + 1) + ". " + product.toCustomerViewString())
+            );
     }
 }

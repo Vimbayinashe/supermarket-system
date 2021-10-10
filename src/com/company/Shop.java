@@ -3,6 +3,7 @@ package com.company;
 import com.company.categories.Categories;
 import com.company.categories.Category;
 import com.company.products.*;
+import com.company.sales.Sales;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,25 +24,13 @@ public class Shop {
     }
 
     private void run() {
-        Categories categories = new Categories();
-        Products products = new Products();
         DefaultData defaultData = new DefaultData();
+        Categories categories = getCategories(defaultData.categories());
+        Products products = getProducts(categories, defaultData.inventoryList());
+        Sales sales = new Sales();
 
-        categories = getCategories(defaultData.categories());
-        products = getProducts(categories, defaultData.inventoryList());
+        commands = new Command[] { products, categories, sales };
 
-        //Command[] commands = new Command[] { categories };
-        Products finalProducts = products;
-
-        commands = new Command[] {
-                products,
-                categories
-        };
-        //commands[0].execute();
-
-
-
-        //Menu
         int selection = 0;
         do {
             printMenuOptions();
@@ -50,78 +39,31 @@ public class Shop {
         } while (selection != 0);
 
 
-        //add a new product todo: as a method on Products?
-            //update product qty, price, even Categories.new()
-        /*printCategories(categories.categories());
-        Product newProduct = addNewProduct(categories);
-        products.addProduct(newProduct);
+        saveFiles(categories, products);
+    }
 
-         */
-
-
-        //todo: Sale
-        //product printing, filter (see Sales) performed here
-        //produces a list<Product> (as above)
-        //sales receipt created & products stock decreases
-
-        //printProductsCustomerView(products.listOfProducts());
-
-        /* implementation of methods for: filtering, searching for price intervals, categories, product name/part of
-        pdt name, brand sorting: price (low - high), (high - low), alphabetically (A-Z), (Z-A)  */
-        //remember -> return an Optional, handle successful result & no result (Optional.empty)
-
-
-//        //filtering price intervals
-//        List<Product> priceFiltered = products.priceRange("0", "10.5");
-//        printProductsCustomerView(priceFiltered);
-//        Long productBarcode = priceFiltered.get(2).barcode();
-//        System.out.println(productBarcode);
-//
-//
-//        //filtering for a category
-//        //user must choose a number from a list of categories => position
-//        int position = 7;
-//        Category selectedCategory = categories.getCategory(position);
-//        List<Product> categoryFiltered = products.filterByCategory(selectedCategory);
-//        printProductsCustomerView(categoryFiltered);
-//
-//
-//        //filter by brand name
-//        List<Product> brandFiltered = products.filterByBrand("ica");
-//        printProductsCustomerView(brandFiltered);
-//
-//
-//        //filter by product name / part of name
-//        List<Product> nameFiltered = products.filterByName("apple");
-//        printProductsCustomerView(nameFiltered);
-//
-
-        //sort by price
-//        List<Product> sortedByPrice = products.sortByPriceAscending();
-//        List<Product> sortedByPrice = products.sortByPriceDescending();
-//        List<Product> sortedByPrice = products.sortByBrandDescending();
-//        printProductsCustomerView(sortedByPrice);
-
-
+    private void saveFiles(Categories categories, Products products) {
         saveFile(categories.listOfStrings(), "categories");
-
         List<String> combined = commaSeparatedListOfProducts(products);
         saveFile(combined, "products");
-
-
     }
 
     private void executeSelection(int selection, Categories categories, Products products) {
         switch (selection) {
-            case 0 -> System.out.println("Shutdown program 0");
+            case 0 -> shutDown(categories, products);
             case 1 -> commands[0].execute("view", categories);
-            case 2 -> System.out.println("Chose 2: buy products");
+            case 2 -> commands[2].execute("", products);
             case 3 -> commands[0].execute("add", categories);
             case 4 -> commands[1].execute("", "");
             case 5 -> commands[0].execute("update", "");
         }
     }
 
+    private void shutDown(Categories categories, Products products) {
+        System.out.println("Saving files...");
+        saveFiles(categories, products);
+        System.out.println("Shop system shutting down.");
+    }
 
     private void printMenuOptions() {
         System.out.println(
