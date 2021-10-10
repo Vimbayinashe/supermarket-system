@@ -52,7 +52,7 @@ public final class Receipt {
 
     public void printReceipt() {
         System.out.println("Receipt number: " + receiptNumber);
-        System.out.println("Products:");
+        System.out.println("Product name, brand, unit price, quantity");
         items.stream()
                 .map(SalesItem::toCustomerViewString)
                 .forEach(System.out::println);

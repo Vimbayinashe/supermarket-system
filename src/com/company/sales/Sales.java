@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Sales implements Command {
@@ -54,6 +55,7 @@ public class Sales implements Command {
         List<Product> filteredProducts;
         List<Double> subTotal = new ArrayList<>();;
         BigDecimal totalPrice;
+        BigDecimal discount = convertPrice(0.0);
 
         System.out.println("\nWelcome to the storefront!");
 
@@ -84,6 +86,7 @@ public class Sales implements Command {
                 if(quantity < 1)
                     System.out.println("Please choose quantity of at least 1.");
 
+
                 purchases.add(new SalesItem(product, quantity));
                 subTotal.add(product.priceAsDouble() * quantity);
 
@@ -94,11 +97,20 @@ public class Sales implements Command {
                     .map(this::convertPrice)
                     .orElse(convertPrice(0.0));
 
-            receipt = new Receipt(purchases, String.valueOf(totalPrice), "10%");
+            if (Double.parseDouble(totalPrice.toPlainString()) > 500) {
+                BigDecimal newTotalPrice = Discounter.largePurchaseDiscounter().applyDiscount(totalPrice);
+                discount = convertPrice(totalPrice.doubleValue() - newTotalPrice.doubleValue());
+                totalPrice = newTotalPrice;
+            }
+
+            receipt = new Receipt(purchases, String.valueOf(totalPrice), String.valueOf(discount));
 
         }
 
         receipt.printReceipt();
+
+        //todo: save receipt
+
 
     }
 }
