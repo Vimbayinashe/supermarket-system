@@ -7,10 +7,7 @@ import com.company.products.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -32,11 +29,22 @@ public class Shop {
         categories = getCategories(defaultData.categories());
         products = getProducts(categories, defaultData.inventoryList());
 
+        //Menu
+        int selection = 0;
+        do {
+            printMenuOptions();
+            selection = handleSelection(scanner);
+            
+        } while (selection != 0);
+
+
         //add a new product todo: as a method on Products?
             //update product qty, price, even Categories.new()
-        printCategories(categories.categories());
+        /*printCategories(categories.categories());
         Product newProduct = addNewProduct(categories);
         products.addProduct(newProduct);
+
+         */
 
 
         //todo: Sale
@@ -89,6 +97,39 @@ public class Shop {
         saveFile(combined, "products");
 
 
+    }
+
+    private int handleSelection (Scanner scanner) {
+        int selection = 0;
+        while (true) {
+            try {
+                selection = Integer.parseInt(scanner.nextLine());
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a number corresponding to the menu.");
+                continue;
+            }
+
+            if(selection < 0 || selection > 5) {
+                System.out.println("Try again. Please enter a number corresponding to the menu.");
+            } else
+                break;
+        }
+
+        return selection;
+    }
+
+    private void printMenuOptions() {
+        System.out.println(
+                """
+                Welcome to The Shop, what would you like to do today?
+                1. View Products
+                2. Buy some products
+                3. Add a new product
+                4. Add a new category
+                5. Update product price or quantity
+                0. Exit program
+                """
+        );
     }
 
     private Product addNewProduct(Categories categories) {
@@ -279,7 +320,7 @@ public class Shop {
 /*
 *   todo: purchase loop
 *    print product list
-*     option to search by name, price range, sort 
+*     option to search by name, price range, sort
 *    user chooses product by index, print product details, confirm product
 *   request quantity, user inputs
 *   print list or user chooses (finished selecting products)
