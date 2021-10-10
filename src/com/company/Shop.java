@@ -32,19 +32,17 @@ public class Shop {
         categories = getCategories(defaultData.categories());
         products = getProducts(categories, defaultData.inventoryList());
 
-        //boolean addProduct = false;
 
-        //menu Options
-            //option that changes addProduct to true
 
-        /*while(addProduct) {
-            Optional<NewProduct> newProduct = addNewProduct(categories);
+        printCategories(categories.categories());
+        // print instructions & user input reciveed & processed
+        Product newProduct = addNewProduct(categories);
+        //update products
+        products.addProduct(newProduct);
 
-            if (newProduct.isPresent()) {
-                products.addProduct((newProduct.get().product()));
-            }
-            addProduct = false;
-        }*/
+
+
+
 
         //printProductsCustomerView(products.listOfProducts());
 
@@ -98,59 +96,58 @@ public class Shop {
 
     }
 
-    private Optional<Product> addNewProduct(Categories categories) {
+    private Product addNewProduct(Categories categories) {
 
-        printCategories(categories.categories());
+        String[] userInput;
+        String[] newProduct = new String[0];
+        boolean userTyping = true;
 
-        //todo: everything in a while loop until user cancels or addsNewProduct
-
-        String[] newProduct;
-        while (true) {
+        while (userTyping) {
+            System.out.println("Categories can be selected from the list above.");
             System.out.println("Enter product barcode, name, brand, categoryNumber, price & quantity separated by a comma");
-            System.out.println("example: 7123456789900, sparkling water, MyBrand, 8, 12.50, 500");
+            System.out.println("example: 7123456789900, carbonated water, MyBrand, 8, 12.50, 500");
 
-            String[] userInput = pattern.split(scanner.nextLine());
+            userInput = pattern.split(scanner.nextLine());
             newProduct = Arrays.stream(userInput).map(String::trim).toArray(String[]::new);
 
             if (newProduct.length != 6) {
                 System.out.println("Please enter six properties for the new product.");
-                //return Optional.empty();
+                continue;
             }
 
             if (!validLong(newProduct[0])) {
                 System.out.println("Invalid barcode entered.");
-                //return Optional.empty();
+                continue;
             }
 
             if (!validInt(newProduct[3]) || Integer.parseInt(newProduct[3]) > categories.categories().size()) {
                 System.out.println("Invalid category entered.");
-                //return Optional.empty();
+                continue;
             }
 
             if (!validInt(newProduct[5])) {
                 System.out.println("Product's quantity is an invalid number.");
-                //return Optional.empty();
+                continue;
             }
 
             if (Integer.parseInt(newProduct[5]) < 0) {
                 System.out.println("Product's quantity is less than zero.");
-                //return Optional.empty();
-                break;
+                continue;
             }
 
             try {
                 Guard.Against.InvalidPriceFormat(newProduct[4]);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                //return Optional.empty();
+                continue;
             }
+
+            userTyping = false;
         }
 
         Category category = categories.getCategory(Integer.parseInt(newProduct[3]));
 
-        Product product = new Product(newProduct[0], newProduct[1], newProduct[2], category, newProduct[4],newProduct[5]);
-
-        return Optional.of(product);
+        return new Product(newProduct[0], newProduct[1], newProduct[2], category, newProduct[4],newProduct[5]);
     }
 
     private void printCategories(List<Category> categories) {
