@@ -2,6 +2,8 @@ package com.company.sales;
 
 import com.company.products.Product;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 public final class SalesItem {
@@ -17,7 +19,7 @@ public final class SalesItem {
         this.name = product.name();
         this.brand = product.brand();
         this.unitPrice = product.price();
-        this.subTotal = String.valueOf(product.priceAsDouble() * quantity);
+        this.subTotal = subTotal(product.priceAsDouble(), quantity);
         this.quantity = quantity;
     }
 
@@ -50,6 +52,12 @@ public final class SalesItem {
     }
     public String toCustomerViewString() {
         return name + " " + brand +  " " + unitPrice + "kr " + quantity + " " + subTotal + "kr";
+    }
+
+    private String subTotal(Double price, int quantity) {
+        double subTotal = price * quantity;
+        int scale = 2;
+        return (new BigDecimal(subTotal)).setScale(scale, RoundingMode.HALF_EVEN).toPlainString();
     }
 
     @Override
