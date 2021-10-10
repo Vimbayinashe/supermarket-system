@@ -34,7 +34,7 @@ public class Shop {
         Products finalProducts = products;
 
         commands = new Command[] {
-                (option) -> printProductsCustomerView(finalProducts.products()),
+                products,
                 categories
         };
         //commands[0].execute();
@@ -45,7 +45,7 @@ public class Shop {
         int selection = 0;
         do {
             printMenuOptions();
-            selection = handleSelection(scanner);
+            selection = Menu.handleSelection(scanner, 5);
             executeSelection(selection, categories, products);
         } while (selection != 0);
 
@@ -114,31 +114,14 @@ public class Shop {
     private void executeSelection(int selection, Categories categories, Products products) {
         switch (selection) {
             case 0 -> System.out.println("Shutdown program 0");
-            case 1 -> commands[0].execute("");
+            case 1 -> commands[0].execute("view");
             case 2 -> System.out.println("Chose 2: buy products");
-            case 3 -> System.out.println("Chose 4. Add new category");
+            case 3 -> commands[0].execute("add");
             case 4 -> commands[1].execute("");
             case 5 -> System.out.println("Chose 5: update products / price");
         }
     }
 
-    private int handleSelection (Scanner scanner) {
-        int selection = 0;
-        while (true) {
-            try {
-                selection = Integer.parseInt(scanner.nextLine());
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter a number corresponding to the menu.");
-                continue;
-            }
-
-            if(selection < 0 || selection > 5) {
-                System.out.println("Try again. Please enter a number corresponding to the menu.");
-            } else
-                break;
-        }
-        return selection;
-    }
 
     private void printMenuOptions() {
         System.out.println(

@@ -111,6 +111,9 @@ public class Product {
     public String toCommaSeparatedString() {
         return barcode + "," + name + "," + brand + "," + category.name() + "," + price + "," + quantity;
     }
+    public String toCustomerViewString() {
+        return name + " " + brand + " - " + price.toPlainString().replace('.', ',') + " kr";
+    }
 
 
     public static void main(String[] args) {
