@@ -124,19 +124,51 @@ public class Products implements Command {
 
     @Override
     public void execute(String option, Object categories) {
-
         switch(option) {
             case "view" -> viewProducts();
             case "add"  -> handleAddProduct(categories);
-            //case "update" -> updateProduct();
+            case "update" -> updateProduct();
             default -> System.out.println("");
 
         }
+    }
 
-        //add product
+    private void updateProduct() {
+        printProductsCustomerView(products);
+        System.out.println("Choose a product to update (enter product's number)");
+        int position = Menu.handleSelection(scanner, products.size());
 
-        //update 5410188030044
+        Product product = products.get(position - 1);
+        printUpdateProduct(product);
+        String price;
 
+        while (true) {
+            System.out.println("Enter new product price or 'x' to cancel");
+            price = (scanner.nextLine().trim());
+
+            if (price.equalsIgnoreCase("x")) {
+                System.out.println("Product price update cancelled.");
+                break;
+            }
+            else {
+                try {
+                    product.price(price);
+                    System.out.print("Product's price successfully updated. ");
+                    printUpdateProduct(product);
+                    break;
+                } catch (IllegalArgumentException e) {
+                    System.out.print("Product update failed: ");
+                    System.out.println(e.getLocalizedMessage());
+                }
+            }
+        }
+    }
+
+    private void printUpdateProduct(Product product) {
+        System.out.println(
+                "Product: " + product.name() + " " + product.brand() + ", Price: " + product.price()  +
+                ", Quantity: " + product.quantity()
+        );
     }
 
     private void handleAddProduct(Object object) {
@@ -185,7 +217,7 @@ public class Products implements Command {
             try {
                 Guard.Against.InvalidPriceFormat(newProduct[4]);
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                System.out.println(e.getLocalizedMessage());
                 continue;
             }
 

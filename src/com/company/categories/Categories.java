@@ -78,7 +78,7 @@ public class Categories implements Command {
             addCategory(input);
             System.out.println(input + " successfully added.");
         } catch(IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
         }
     }
 }

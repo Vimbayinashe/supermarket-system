@@ -118,7 +118,7 @@ public class Shop {
             case 2 -> System.out.println("Chose 2: buy products");
             case 3 -> commands[0].execute("add", categories);
             case 4 -> commands[1].execute("", "");
-            case 5 -> System.out.println("Chose 5: update products / price");
+            case 5 -> commands[0].execute("update", "");
         }
     }
 
@@ -126,12 +126,13 @@ public class Shop {
     private void printMenuOptions() {
         System.out.println(
                 """
+                
                 Welcome to The Shop, what would you like to do today?
                 1. View Products
                 2. Buy some products
                 3. Add a new product
                 4. Add a new category
-                5. Update product price or quantity
+                5. Update a product's price
                 0. Exit program
                 """
         );
