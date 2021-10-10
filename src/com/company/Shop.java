@@ -34,7 +34,7 @@ public class Shop {
         Products finalProducts = products;
 
         commands = new Command[] {
-                () -> printProductsCustomerView(finalProducts.products()),
+                (option) -> printProductsCustomerView(finalProducts.products()),
                 categories
         };
         //commands[0].execute();
@@ -114,10 +114,10 @@ public class Shop {
     private void executeSelection(int selection, Categories categories, Products products) {
         switch (selection) {
             case 0 -> System.out.println("Shutdown program 0");
-            case 1 -> commands[0].execute();
+            case 1 -> commands[0].execute("");
             case 2 -> System.out.println("Chose 2: buy products");
             case 3 -> System.out.println("Chose 4. Add new category");
-            case 4 -> commands[1].execute();
+            case 4 -> commands[1].execute("");
             case 5 -> System.out.println("Chose 5: update products / price");
         }
     }

@@ -70,7 +70,7 @@ public class Categories implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(String option) {
         System.out.println("Enter a new category name");
         String input = scanner.nextLine();
 

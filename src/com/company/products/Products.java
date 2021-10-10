@@ -1,5 +1,6 @@
 package com.company.products;
 
+import com.company.Command;
 import com.company.categories.Category;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Products {
+public class Products implements Command {      //add arg
 
     private final List<Product> products = new ArrayList<>();
 
@@ -107,6 +108,10 @@ public class Products {
         return products.stream();
     }
 
+    @Override
+    public void execute(String option) {
+
+    }
 }
 
 
