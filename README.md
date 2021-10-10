@@ -1,1 +1,1 @@
-A supermarket system. 
+A supermarket system created with Java. 
