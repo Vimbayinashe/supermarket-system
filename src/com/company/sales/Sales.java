@@ -2,15 +2,17 @@ package com.company.sales;
 
 import com.company.Command;
 import com.company.Menu;
-import com.company.categories.Categories;
 import com.company.products.Product;
 import com.company.products.Products;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Sales implements Command {
@@ -31,12 +33,17 @@ public class Sales implements Command {
     }
 
     public void saveReceipt(Receipt receipt) {
-        //add to receipts
 
-        String fileName = "receipt - " + receipt.receiptNumber();
+        String fileName ="Receipt-" + receipt.receiptNumber() + ".csv";
+        Path path =  Path.of("resources", "receipts", fileName);
 
-        //save file
 
+        try {
+            Files.createDirectories(path.getParent());
+            Files.write(path, receipt.commaSeparatedValues());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -97,9 +104,9 @@ public class Sales implements Command {
                     .map(this::convertPrice)
                     .orElse(convertPrice(0.0));
 
-            if (Double.parseDouble(totalPrice.toPlainString()) > 500) {
+            if (convertToDouble(totalPrice) > 500) {
                 BigDecimal newTotalPrice = Discounter.largePurchaseDiscounter().applyDiscount(totalPrice);
-                discount = convertPrice(totalPrice.doubleValue() - newTotalPrice.doubleValue());
+                discount = convertPrice(convertToDouble(totalPrice) - convertToDouble(newTotalPrice));
                 totalPrice = newTotalPrice;
             }
 
@@ -109,8 +116,13 @@ public class Sales implements Command {
 
         receipt.printReceipt();
 
-        //todo: save receipt
-
+        saveReceipt(receipt);
 
     }
+
+    private double convertToDouble(BigDecimal price) {
+        return Double.parseDouble(price.toPlainString());
+    }
 }
+
+

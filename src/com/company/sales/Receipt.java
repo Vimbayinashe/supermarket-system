@@ -8,26 +8,26 @@ import java.util.List;
 import java.util.Objects;
 
 public final class Receipt {
-    private final long receiptNumber;
+    private final String receiptNumber;
     private final List<SalesItem> items;
     private final String totalPrice;
     private final String discount;
 
     public Receipt() {
-        this.receiptNumber = Instant.now().getEpochSecond();
+        this.receiptNumber = String.valueOf(Instant.now().getEpochSecond());;
         this.items = new ArrayList<>();
         this.totalPrice = "0.0";
         this.discount = "0%";
     }
 
     public Receipt(List<SalesItem> items, String totalPrice, String discount) {
-        this.receiptNumber = Instant.now().getEpochSecond();
+        this.receiptNumber = String.valueOf(Instant.now().getEpochSecond());
         this.items = items;
         this.totalPrice = totalPrice;
         this.discount = discount;
     }
 
-    public long receiptNumber() {
+    public String receiptNumber() {
         return receiptNumber;
     }
 
@@ -44,8 +44,12 @@ public final class Receipt {
     }
 
     public List<String> commaSeparatedValues() {
-        List<String> list = items.stream().map(SalesItem::toCommaSeparatedString).toList();
+        List<String> list = new ArrayList<>();
         list.add(0, receiptNumber + "," + totalPrice + "," + discount);
+
+        items.stream()
+                .map(SalesItem::toCommaSeparatedString)
+                .forEach(list::add);
 
         return list;
     }
